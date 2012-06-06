@@ -495,3 +495,36 @@ let g:path_to_vimrc_local = '~/.vimrc_local'
 if filereadable(expand(g:path_to_vimrc_local))
   execute printf('source %s', expand(g:path_to_vimrc_local))
 endif
+
+" neobundle
+set nocompatible               " be iMproved
+filetype off                   " required!
+filetype plugin indent off     " required!
+
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  call neobundle#rc(expand('~/.vim/bundle/'))
+endif
+NeoBundle 'Shougo/vimproc'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'hallettj/jslint.vim'
+NeoBundle 'tyru/operator-camelize.vim'
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'thinca/vim-visualstar'
+NeoBundle 'vim-scripts/yanktmp.vim'
+NeoBundle 'vimtaku/vim-textobj-sigil'
+NeoBundle 't9md/vim-unite-ack'
+NeoBundle 'h1mesuke/textobj-wiw'
+NeoBundle 'kmnk/vim-unite-giti'
+NeoBundle 'msanders/snipmate.vim'
+NeoBundle 'mileszs/ack.vim'
+NeoBundle 'vim-scripts/taglist.vim'
+NeoBundle 'hotchpotch/perldoc-vim'
+NeoBundle 'nakatakeshi/.vim'
+" local files
+"NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
+
+filetype plugin indent on     " required!
