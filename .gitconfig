@@ -1,0 +1,22 @@
+[user]
+	name = takeshi.nakata
+	email = nakatatakeshi@gmail.com
+[color]
+	ui = true
+[alias]
+	back = reset --hard HEAD
+	cancel = checkout HEAD
+	cob = checkout -b
+	d = diff
+	ds = diff --cached
+	dh = diff HEAD
+	merges = merge --squash
+	chp = chery-pick
+	cic = reset --hard HEAD^
+	ci = commit
+	co = checkout
+	st = status
+	bc = branch
+[core]
+	excludesfile = ~/.gitignore
+	editor = vim
