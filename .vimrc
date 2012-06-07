@@ -28,6 +28,7 @@ NeoBundle 'mileszs/ack.vim'
 NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'hotchpotch/perldoc-vim'
 NeoBundle 'nakatakeshi/.vim'
+NeoBundle 'nakatakeshi/jump2pm.vim'
 " local files
 "NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
@@ -285,12 +286,12 @@ noremap sd :vsplit<ENTER><C-]>
 
 " for search_pm.vim
 "let g:search_lib_dir = [ 'lib', 'inc']
-noremap fg :call Search_pm('vne')<ENTER>
-noremap ff :call Search_pm('e')<ENTER>
-noremap fe :call Search_pm('sp')<ENTER>
-noremap fd :call Search_pm('to sp')<ENTER>
-noremap ft :call Search_pm('tabe')<ENTER>
-noremap fb :call Search_pm('bo vsp')<ENTER>
+noremap fg :call Jump2pm('vne')<ENTER>
+noremap ff :call Jump2pm('e')<ENTER>
+noremap fe :call Jump2pm('sp')<ENTER>
+noremap fd :call Jump2pm('to sp')<ENTER>
+noremap ft :call Jump2pm('tabe')<ENTER>
+noremap fb :call Jump2pm('bo vsp')<ENTER>
 let search_lib_dir_opening = 'lib/,/usr/local/bundle-plack/lib/perl5/,/usr/local/bundle-plack/lib/perl5/x86_64-linux-thread-multi/'
 
 autocmd FileType perl :noremap ss :call Jump2sub()<ENTER>
