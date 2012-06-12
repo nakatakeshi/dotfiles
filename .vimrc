@@ -29,6 +29,7 @@ NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'hotchpotch/perldoc-vim'
 NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
+NeoBundle 'vim-scripts/errormarker.vim'
 " local files
 "NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
@@ -36,8 +37,11 @@ filetype plugin indent on     " required!
 
 :syntax enable
 set t_Co=256
+
 ":colorscheme  desert256
-:colorscheme calmar256-dark
+:colorscheme  xoria256
+":colorscheme  molokai
+":colorscheme calmar256-dark
 "colorscheme wombat256
 ":colorscheme slate
 "c¤Îauato indent
