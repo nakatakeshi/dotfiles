@@ -29,7 +29,8 @@ NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'hotchpotch/perldoc-vim'
 NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
-NeoBundle 'vim-scripts/errormarker.vim'
+"NeoBundle 'vim-scripts/errormarker.vim'
+NeoBundle 'scrooloose/syntastic'
 " local files
 "NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
@@ -256,7 +257,7 @@ autocmd BufNewFile,BufRead *.t set filetype=perl
 " .yamlファイルもperlのsyntax表示にする
 autocmd BufNewFile,BufRead *.yaml,*.yml set filetype=perl
 
-autocmd BufWritePost,FileWritePost *.p[lm] !perl -MFindBin::libs -wc %
+"autocmd BufWritePost,FileWritePost *.p[lm] !perl -MFindBin::libs -wc %
 
 " }}}
 
@@ -534,4 +535,13 @@ if filereadable(expand(g:path_to_vimrc_local))
   execute printf('source %s', expand(g:path_to_vimrc_local))
 endif
 
+" syntastic {{{
 
+let g:syntastic_mode_map = {
+      \  'mode': 'active',
+      \ 'active_filetypes': ['perl', 'javascript'],
+      \ 'passive_filetypes': []
+      \ }
+let g:syntastic_auto_jump=1
+let g:syntastic_auto_loc_list=1
+" }}}
