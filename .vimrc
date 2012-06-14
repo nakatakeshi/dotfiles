@@ -545,3 +545,8 @@ let g:syntastic_mode_map = {
 let g:syntastic_auto_jump=1
 let g:syntastic_auto_loc_list=1
 " }}}
+
+" mkd.vim
+
+autocmd BufRead,BufNewFile *.mkd  setfiletype mkd
+autocmd BufRead,BufNewFile *.md  setfiletype mkd
