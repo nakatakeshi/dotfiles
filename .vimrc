@@ -9,7 +9,7 @@ if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
-NeoBundle 'Shougo/vimproc'
+"NeoBundle 'Shougo/vimproc' " make at local
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'hallettj/jslint.vim'
@@ -31,6 +31,8 @@ NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
 "NeoBundle 'vim-scripts/errormarker.vim'
 NeoBundle 'scrooloose/syntastic'
+NeoBundle 'Shougo/neocomplcache'
+
 " local files
 "NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
@@ -407,10 +409,38 @@ call unite#define_source(s:unite_source)
 " }}}
 
 " Neocomplecache {{{
-"let g:neocomplcache_enable_at_startup = 1
-"let g:neocomplcache_manual_completion_length = 2
-"let g:neocomplcache_max_list = 200
-"let g:neocomplcache_disable_auto_complete = 1
+"起動時に有効
+let g:neocomplcache_enable_at_startup = 1
+"ポップアップメニューで表示される候補の数。初期値は100
+let g:neocomplcache_max_list = 20
+"自動補完を行う入力数を設定。初期値は2
+let g:neocomplcache_auto_completion_start_length = 2
+"手動補完時に補完を行う入力数を制御。値を小さくすると文字の削除時に重くなる
+let g:neocomplcache_manual_completion_start_length = 3
+"バッファや辞書ファイル中で、補完の対象となるキーワードの最小長さ。初期値は4。
+let g:neocomplcache_min_keyword_length = 4
+"シンタックスファイル中で、補完の対象となるキーワードの最小長さ。初期値は4。
+let g:neocomplcache_min_syntax_length = 4
+"1:補完候補検索時に大文字・小文字を無視する
+let g:neocomplcache_enable_ignore_case = 1
+"入力に大文字が入力されている場合、大文字小文字の区別をする
+let g:neocomplcache_enable_smart_case = 1
+"DTと入力するとD*T*と解釈され、DateTime等にマッチする。
+let g:neocomplcache_enable_camel_case_completion = 0
+"アンダーバーを区切りとしたあいまい検索を行うかどうか。
+"m_sと入力するとm*_sと解釈され、mb_substr等にマッチする。
+let g:neocomplcache_enable_underbar_completion = 0
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+" Or set this.
+let g:neocomplcache_enable_cursor_hold_i = 1
+" Or set this.
+let g:neocomplcache_enable_insert_char_pre = 1
+
 " }}}
 
 "行頭のスペースの連続をハイライトさせる
@@ -550,3 +580,4 @@ autocmd BufRead,BufNewFile *.mkd  set filetype=mkd
 autocmd BufRead,BufNewFile *.md   set filetype=mkd
 
 set history=100
+
