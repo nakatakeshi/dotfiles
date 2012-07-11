@@ -40,16 +40,14 @@ filetype plugin indent on     " required!
 set t_Co=256
 
 ":colorscheme  desert256
-:colorscheme  xoria256
+":colorscheme  xoria256
 ":colorscheme  molokai
-":colorscheme calmar256-dark
+:colorscheme calmar256-dark
 "colorscheme wombat256
 ":colorscheme slate
 "cのauato indent
 ":set cindent
 :set autoindent
-"vi 非互換モード(上下左右キーなど)
-set nocompatible
 "インクリメンタル検索
 ":set incsearch
 "検索結果色分け
@@ -548,3 +546,10 @@ let g:syntastic_mode_map = {
 let g:syntastic_auto_jump=1
 let g:syntastic_auto_loc_list=1
 " }}}
+
+" mkd.vim
+
+autocmd BufRead,BufNewFile *.mkd  set filetype=mkd
+autocmd BufRead,BufNewFile *.md   set filetype=mkd
+
+set history=100
