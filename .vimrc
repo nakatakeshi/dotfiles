@@ -259,6 +259,9 @@ autocmd BufNewFile,BufRead *.yaml,*.yml set filetype=perl
 
 "autocmd BufWritePost,FileWritePost *.p[lm] !perl -MFindBin::libs -wc %
 
+" for perl tidy
+map ,ptv <Esc>:'<,'>! perltidy<CR>
+
 " }}}
 
 " map {{{
@@ -351,8 +354,8 @@ nnoremap <SID>(toggle-paste)          :<C-u>set paste!<CR>
 
 source $VIMRUNTIME/macros/matchit.vim
 
-":%! ~/bin/js_swell.pl¤ÇÀ°·Á
-"map jsb <Esc>:%!PERL5LIB=PERL5LIB:~/perl5/i386-linux-thread-multi:~/perl5/lib/perl5 perl ~/local/bin/js_swell.pl
+":%! ~/bin/js_swell.pl¤ÇÀ°·Á ÈùÌ¯
+"map ,jst <Esc>:'<,'>! perl ~/bin/js_swell.pl<CR>
 
 " pathogen.vim
 call pathogen#helptags()
