@@ -473,6 +473,8 @@ endif
 "map co <Esc>:copen<Enter>
 "let g:JSLintHighlightErrorLine = 0
 
+" for js-beautify
+map ,jsb <Esc>:'<,'>! js-beautify -<CR>
 
 " operator-camelize.vim
 map <Leader>S <Plug>(operator-camelize)
