@@ -106,6 +106,9 @@ set mouse=a
 " screen対応
 set ttymouse=xterm2
 
+" 一度に複数開けるtabの個数
+set tabpagemax =100
+
 " 行末のスペースハイライト
 set list
 set listchars=tab:>-,trail:-,nbsp:-,extends:>,precedes:<,
