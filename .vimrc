@@ -303,6 +303,12 @@ noremap fe :call Jump2pm('sp')<ENTER>
 noremap fd :call Jump2pm('to sp')<ENTER>
 noremap ft :call Jump2pm('tabe')<ENTER>
 noremap fb :call Jump2pm('bo vsp')<ENTER>
+vnoremap fg :call Jump2pmV('vne')<ENTER>
+vnoremap ff :call Jump2pmV('e')<ENTER>
+vnoremap fe :call Jump2pmV('sp')<ENTER>
+vnoremap fd :call Jump2pmV('to sp')<ENTER>
+vnoremap ft :call Jump2pmV('tabe')<ENTER>
+vnoremap fb :call Jump2pmV('bo vsp')<ENTER>
 let search_lib_dir_opening = 'lib/,/usr/local/bundle-plack/lib/perl5/,/usr/local/bundle-plack/lib/perl5/x86_64-linux-thread-multi/'
 
 autocmd FileType perl :noremap ss :call Jump2sub()<ENTER>
