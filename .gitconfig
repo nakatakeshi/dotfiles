@@ -17,6 +17,8 @@
 	co = checkout
 	st = status
 	bc = branch
+	diffc = diff --cached
 [core]
 	excludesfile = ~/.gitignore
 	editor = vim
+	pager = lv -c

@@ -30,7 +30,7 @@ NeoBundle 'hotchpotch/perldoc-vim'
 NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
 "NeoBundle 'vim-scripts/errormarker.vim'
-NeoBundle 'scrooloose/syntastic'
+"NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
 
 " local files
@@ -76,6 +76,8 @@ set number
 set shiftwidth=4
 " Insertモードで <Tab> を挿入するとき、代わりに適切な数の空白を使う。（有効:expandtab/無効:noexpandtab）
 :set expandtab
+" たまにnoexpandtabになりやがるのでmap
+nnoremap ex :<C-u>:set expandtab<CR>
 "閉じ括弧が入力されたとき、対応する括弧を表示する
 set showmatch
 "ファイル内の <Tab> が対応する空白の数 ファイル内のtabのみためのながさ
@@ -260,7 +262,7 @@ autocmd BufNewFile,BufRead *.t set filetype=perl
 " .yamlファイルもperlのsyntax表示にする
 autocmd BufNewFile,BufRead *.yaml,*.yml set filetype=perl
 
-"autocmd BufWritePost,FileWritePost *.p[lm] !perl -MFindBin::libs -wc %
+autocmd BufWritePost,FileWritePost *.p[lm] !perl -MFindBin::libs -wc %
 
 " for perl tidy
 map ,ptv <Esc>:'<,'>! perltidy<CR>
@@ -579,13 +581,13 @@ endif
 
 " syntastic {{{
 
-let g:syntastic_mode_map = {
-      \  'mode': 'active',
-      \ 'active_filetypes': ['perl', 'javascript'],
-      \ 'passive_filetypes': []
-      \ }
-let g:syntastic_auto_jump=1
-let g:syntastic_auto_loc_list=1
+"let g:syntastic_mode_map = {
+"      \  'mode': 'active',
+"      \ 'active_filetypes': ['perl', 'javascript'],
+"      \ 'passive_filetypes': []
+"      \ }
+"let g:syntastic_auto_jump=1
+"let g:syntastic_auto_loc_list=1
 " }}}
 
 " mkd.vim

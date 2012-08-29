@@ -1,0 +1,6 @@
+--type-set=perlt=.t,.yaml,.yml
+--type-set=plpm=.pl,.pm
+--type-set=tmpl=.tmpl,.tpl,.txt
+--type-set=pl=.pl
+--type-set=pm=.pm
+--type-set=t=.t

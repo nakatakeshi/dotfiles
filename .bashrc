@@ -42,6 +42,7 @@ export PIG_CLASSPATH=$HADOOP_HOME/conf
 
 if [ -f ~/.git-completion.bash ]; then
     source ~/.git-completion.bash
+    PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
 fi
 
 # Source local definitions

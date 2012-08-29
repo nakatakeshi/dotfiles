@@ -35,12 +35,12 @@ setopt COMPLETE_IN_WORD
 # autoload -U colors
 #colors
 #
-#¥Ç¥£¥ì¥¯¥È¥êÌ¾¤òÆþÎÏ¤¹¤ë¤È¤½¤Î¥Ç¥£¥ì¥¯¥È¥ê¤Ë°ÜÆ°
+#ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåã‚’å…¥åŠ›ã™ã‚‹ã¨ãã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ç§»å‹•
 setopt auto_cd
-#cd»þ¤Ë-[tab]¤Ç²áµî¤Î°ÜÆ°Àè¤òÊä´°
+#cdæ™‚ã«-[tab]ã§éŽåŽ»ã®ç§»å‹•å…ˆã‚’è£œå®Œ
 setopt auto_pushd
 
-# ¥³¥Þ¥ó¥É¥é¥¤¥ó¤Î°ú¿ô¤Ç --prefix=/usr ¤Ê¤É¤Î = °Ê¹ß¤Ç¤âÊä´°¤Ç¤­¤ë
+# ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®å¼•æ•°ã§ --prefix=/usr ãªã©ã® = ä»¥é™ã§ã‚‚è£œå®Œã§ãã‚‹
 setopt magic_equal_subst
 
 TERM=xterm-256color
@@ -64,7 +64,7 @@ bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
 
 
-# ºÇ¸å¤ËÂÇ¤Ã¤¿¥³¥Þ¥ó¥É¥¹¥Æ¡¼¥¿¥¹¹Ô¤Ë
+# æœ€å¾Œã«æ‰“ã£ãŸã‚³ãƒžãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡Œã«
 if [ "$TERM" = "screen" ]; then
         chpwd () { echo -n "_`dirs`^[\\" }
         preexec() {
@@ -115,7 +115,7 @@ function chpwd() {
 setopt autopushd
 alias b='popd > /dev/null'
 
-# zsh¤ÎRPROMPT¤Ë¥Ö¥é¥ó¥ÁÌ¾É½¼¨
+# zshã®RPROMPTã«ãƒ–ãƒ©ãƒ³ãƒåè¡¨ç¤º
 # autoload -Uz vcs_info
 # zstyle ':vcs_info:*' formats '(%s)-[%b]'
 # zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
@@ -130,6 +130,31 @@ autoload bashcompinit
 bashcompinit
 source ~/.git-completion.bash
 
+# http://qiita.com/items/325cffc755fc1ff91928
+setopt prompt_subst
+autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
+
+function rprompt-git-current-branch {
+  local name st color gitdir action
+  if [[ "$PWD" =~ '/Â¥.git(/.*)?$' ]]; then
+    return
+  fi
+  name=`git rev-parse --abbrev-ref=loose HEAD 2> /dev/null`
+  if [[ -z $name ]]; then
+    return
+  fi
+
+  gitdir=`git rev-parse --git-dir 2> /dev/null`
+  action=`VCS_INFO_git_getaction "$gitdir"` && action="($action)"
+
+  color=%F{green}
+  echo "$color$name$action%f%b "
+}
+
+# -------------- how to use ---------------- #
+RPROMPT='`rprompt-git-current-branch`'
+
 if [ -f ~/.zshrc_local ]; then
     source ~/.zshrc_local
 fi
+

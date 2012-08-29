@@ -1,4 +1,4 @@
-shell /bin/zsh
+shell /home/bkapps/local/bin/zsh
 layout new
 autodetach on
 termcapinfo xterm-256color 'Co#256:pa#32767:AF=\E[38;5;%p1%dm:AB=\E[48;5;%p1%dm:tc=xterm'
