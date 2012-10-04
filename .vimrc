@@ -41,10 +41,13 @@ filetype plugin indent on     " required!
 :syntax enable
 set t_Co=256
 
+"set background=dark
+":colorscheme solarized
 ":colorscheme  desert256
 ":colorscheme  xoria256
-":colorscheme  molokai
-:colorscheme calmar256-dark
+:colorscheme  molokai
+"this
+":colorscheme calmar256-dark
 "colorscheme wombat256
 ":colorscheme slate
 "cのauato indent
@@ -348,6 +351,15 @@ map! <C-V> <C-R>"
 " *検索時に次に行かないようにする
 nnoremap * *N
 
+" home end
+noremap <C-a> <Home>
+noremap <C-e> <End>
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+
+" del
+inoremap <C-l> <Del>
+
 " コマンドモードで閉じる
 noremap fuck :qa!<CR>
 noremap q :q<CR>
@@ -448,7 +460,7 @@ let g:neocomplcache_enable_underbar_completion = 0
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
+"inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 " Or set this.
 let g:neocomplcache_enable_cursor_hold_i = 1
