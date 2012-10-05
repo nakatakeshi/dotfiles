@@ -1,6 +1,6 @@
 [user]
 	name = takeshi.nakata
-	email = nakatatakeshi@gmail.com
+	email = takeshi.nakata@mixi.co.jp
 [color]
 	ui = true
 [alias]
@@ -18,7 +18,8 @@
 	st = status
 	bc = branch
 	diffc = diff --cached
+	unstage = rm --cached
 [core]
 	excludesfile = ~/.gitignore
-	editor = vim
+	editor = /home/bkapps/local/bin/vim
 	pager = lv -c
