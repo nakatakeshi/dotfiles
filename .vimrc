@@ -32,7 +32,12 @@ NeoBundle 'nakatakeshi/jump2pm.vim'
 "NeoBundle 'vim-scripts/errormarker.vim'
 "NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
-
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'mattn/multi-vim'
+NeoBundle 'tomtom/tcomment_vim.git'
+NeoBundle 'jiangmiao/simple-javascript-indenter'
+NeoBundle 'jelera/vim-javascript-syntax'
+NeoBundle 'teramako/jscomplete-vim'
 " local files
 "NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
@@ -45,16 +50,18 @@ set t_Co=256
 ":colorscheme solarized
 ":colorscheme  desert256
 ":colorscheme  xoria256
-:colorscheme  molokai
+":colorscheme  molokai
 "this
 ":colorscheme calmar256-dark
 "colorscheme wombat256
-":colorscheme slate
+:colorscheme slate
 "cのauato indent
 ":set cindent
 :set autoindent
 "インクリメンタル検索
 ":set incsearch
+" scroll
+set scrolloff=20
 "検索結果色分け
 :set hlsearch
 "clipboard共有
@@ -606,6 +613,18 @@ endif
 
 autocmd BufRead,BufNewFile *.mkd  set filetype=mkd
 autocmd BufRead,BufNewFile *.md   set filetype=mkd
+
+" Simple-Javascript-Indenter
+" この設定入れるとshiftwidthを1にしてインデントしてくれる
+let g:SimpleJsIndenter_BriefMode = 1
+" この設定入れるとswitchのインデントがいくらかマシに
+let g:SimpleJsIndenter_CaseIndentLevel = -1
+
+" vim-javascript-syntax
+au FileType javascript call JavaScriptFold()
+" 折り畳みしちゃうので回避
+set foldlevel=100
+
 
 set history=100
 
