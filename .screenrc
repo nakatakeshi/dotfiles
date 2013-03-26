@@ -1,4 +1,4 @@
-shell /home/bkapps/local/bin/zsh
+shell $HOME/local/bin/zsh
 layout new
 autodetach on
 termcapinfo xterm-256color 'Co#256:pa#32767:AF=\E[38;5;%p1%dm:AB=\E[48;5;%p1%dm:tc=xterm'
@@ -35,12 +35,12 @@ bind -c resize k eval 'resize -1' 'command -c resize'
 split
 focus down
 screen -t log1
-split -v
-focus right
-screen -t log2
+# split -v
+# focus right
+# screen -t log2
 focus up
 screen -t dev
-resize +20
+resize +25
 
 # 縦分割 あんまり
 # split -v
