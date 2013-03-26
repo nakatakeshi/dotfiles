@@ -46,25 +46,18 @@ setopt magic_equal_subst
 TERM=xterm-256color
 eval $(dircolors -b ~/.dir_color)
 
-
-# ログイン時にwindow分パスワードきかれちゃうのでコメントアウト
-# screen起動時にssh-agent設定
-# if [ "$TERM" = "xterm-256color" ]; then
-#     eval `ssh-agent`
-#     ssh-add ~/.ssh/id_rsa
-# fi
 #ssh-agent in screen
-# agent="$HOME/tmp/ssh-agent-$USER"
-# if [ -S "$SSH_AUTH_SOCK" ]; then
-#     case $SSH_AUTH_SOCK in
-#     /tmp/*/agent.[0-9]*)
-#         ln -snf "$SSH_AUTH_SOCK" $agent && export SSH_AUTH_SOCK=$agent
-#     esac
-# elif [ -S $agent ]; then
-#     export SSH_AUTH_SOCK=$agent
-# else
-#     echo "no ssh-agent"
-# fi
+agent="$HOME/tmp/ssh-agent-$USER"
+if [ -S "$SSH_AUTH_SOCK" ]; then
+    case $SSH_AUTH_SOCK in
+    /tmp/*/agent.[0-9]*)
+        ln -snf "$SSH_AUTH_SOCK" $agent && export SSH_AUTH_SOCK=$agent
+    esac
+elif [ -S $agent ]; then
+    export SSH_AUTH_SOCK=$agent
+else
+    echo "no ssh-agent"
+fi
 
 # User specific aliases and functions
 alias diff='colordiff'

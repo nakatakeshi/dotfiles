@@ -20,6 +20,11 @@ alias la="ls -ltra"
 alias w3m='w3m -cookie'
 alias screen='~/local/bin/screen'
 
+# screen起動時にssh-agent設定
+if [ "$TERM" = "xterm-256color" ]; then
+    eval `ssh-agent`
+    ssh-add ~/.ssh/id_rsa
+fi
 screen
 function chpwd() {
   ls
