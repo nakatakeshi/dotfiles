@@ -45,6 +45,27 @@ setopt magic_equal_subst
 
 TERM=xterm-256color
 eval $(dircolors -b ~/.dir_color)
+
+
+# ログイン時にwindow分パスワードきかれちゃうのでコメントアウト
+# screen起動時にssh-agent設定
+# if [ "$TERM" = "xterm-256color" ]; then
+#     eval `ssh-agent`
+#     ssh-add ~/.ssh/id_rsa
+# fi
+#ssh-agent in screen
+# agent="$HOME/tmp/ssh-agent-$USER"
+# if [ -S "$SSH_AUTH_SOCK" ]; then
+#     case $SSH_AUTH_SOCK in
+#     /tmp/*/agent.[0-9]*)
+#         ln -snf "$SSH_AUTH_SOCK" $agent && export SSH_AUTH_SOCK=$agent
+#     esac
+# elif [ -S $agent ]; then
+#     export SSH_AUTH_SOCK=$agent
+# else
+#     echo "no ssh-agent"
+# fi
+
 # User specific aliases and functions
 alias diff='colordiff'
 alias perldoc='env LANG=C perldoc'
@@ -65,7 +86,7 @@ bindkey "^[[4~" end-of-line
 
 
 # 最後に打ったコマンドステータス行に
-if [ "$TERM" = "screen" ]; then
+if [ "$TERM" = "xterm-256color" ]; then
         chpwd () { echo -n "_`dirs`^[\\" }
         preexec() {
                 # see [zsh-workers:13180]
@@ -106,7 +127,7 @@ fi
 function chpwd() {
   ls
   echo "$TERM"
-  if [ "$TERM" = "screen" ]; then
+  if [ "$TERM" = "xterm-256color" ]; then
     echo -n "k[`basename $PWD`]\\"
   fi
 }
@@ -157,4 +178,3 @@ RPROMPT='`rprompt-git-current-branch`'
 if [ -f ~/.zshrc_local ]; then
     source ~/.zshrc_local
 fi
-
