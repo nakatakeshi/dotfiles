@@ -1,0 +1,21 @@
+set pasteboard
+set guioptions=b
+
+map ff gd
+map fg <C-w>n
+map fe <C-w>s
+map fq <C-w>q
+map wk <C-w>k
+map wj <C-w>j
+map wl <C-w>l
+map wh <C-w>h
+map <C-a> ^
+map <C-e> $
+nmap q :q<CR>
+nmap ; :w<CR>
+
+" not enable...
+" vmap <tab> >gv
+" vmap <s-tab> <gv
+" imap <C-a> <Home>
+" imap <C-e> <End>
