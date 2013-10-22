@@ -19,11 +19,11 @@ NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-visualstar'
 NeoBundle 'vim-scripts/yanktmp.vim'
+NeoBundle 'vim-scripts/Align'
 NeoBundle 'vimtaku/vim-textobj-sigil'
 NeoBundle 't9md/vim-unite-ack'
 NeoBundle 'h1mesuke/textobj-wiw'
 NeoBundle 'kmnk/vim-unite-giti'
-NeoBundle 'msanders/snipmate.vim'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'hotchpotch/perldoc-vim'
@@ -38,6 +38,9 @@ NeoBundle 'tomtom/tcomment_vim.git'
 NeoBundle 'jiangmiao/simple-javascript-indenter'
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'teramako/jscomplete-vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'vim-scripts/monday'
+NeoBundle 'rking/ag.vim'
 " local files
 "NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
@@ -213,7 +216,12 @@ autocmd BufNewFile,BufRead *.t set filetype=perl
 " .yamlファイルもperlのsyntax表示にする
 autocmd BufNewFile,BufRead *.yaml,*.yml set filetype=perl
 
-autocmd BufWritePost,FileWritePost *.p[lm] !perl -MFindBin::libs -wc %
+autocmd BufWritePost,FileWritePost *.p[lm] !perl -wc %
+
+au BufWritePost *.pl,*.pm :call ReloadApache()
+function! ReloadApache()
+    call system($HOME. '/bin/restart_apache.pl')
+endfunction
 
 " for perl tidy
 map ,ptv <Esc>:'<,'>! perltidy<CR>
@@ -475,7 +483,7 @@ function! FileOfPackage()
         let &iskeyword = s:save_iskeyword
     endt
     let s:package_path = substitute(s:package_name, '::','/','g')
-    let s:ab_package_path = s:root_path . "lib/" . s:package_path
+    let s:ab_package_path = s:root_path . "/lib/" . s:package_path
     if (!filereadable(s:ab_package_path) && !filereadable(s:ab_package_path . s:pm_ext))
         let s:package_path = substitute(s:package_path,'/[^(/)]*$','','g')
     endif
@@ -548,10 +556,11 @@ endif
 "let g:syntastic_auto_loc_list=1
 " }}}
 
-" mkd.vim
+" mkd.vim {{{
 
 autocmd BufRead,BufNewFile *.mkd  set filetype=mkd
 autocmd BufRead,BufNewFile *.md   set filetype=mkd
+" }}}
 
 " Simple-Javascript-Indenter
 " この設定入れるとshiftwidthを1にしてインデントしてくれる
@@ -567,3 +576,15 @@ set foldlevel=100
 
 set history=100
 
+" use ag in ack.vim {{{
+let g:ackprg = 'ag'
+" }}}
+
+" fugitive.vim {{{
+nmap <silent> ,gs :<C-u>Gstatus<CR>
+nmap <silent> ,ga :<C-u>Gwrite<CR>
+nmap <silent> ,gr :<C-u>Gremove<CR>
+nmap <silent> ,gc :<C-u>Gcommit<CR>
+nmap <silent> ,gd :<C-u>Gdiff<CR>
+nmap <silent> ,gl :<C-u>Glog<CR>
+" }}}
