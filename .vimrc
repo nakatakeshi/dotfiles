@@ -29,6 +29,7 @@ NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'hotchpotch/perldoc-vim'
 NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
+NeoBundle 'nakatakeshi/show_github_url.vim'
 "NeoBundle 'vim-scripts/errormarker.vim'
 "NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
@@ -588,3 +589,6 @@ nmap <silent> ,gc :<C-u>Gcommit<CR>
 nmap <silent> ,gd :<C-u>Gdiff<CR>
 nmap <silent> ,gl :<C-u>Glog<CR>
 " }}}
+
+"
+noremap gu :call GithubUrl()<enter>
