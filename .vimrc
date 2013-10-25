@@ -30,6 +30,7 @@ NeoBundle 'hotchpotch/perldoc-vim'
 NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
 NeoBundle 'nakatakeshi/show_github_url.vim'
+NeoBundle 'nakatakeshi/perl_file_of_package.vim'
 "NeoBundle 'vim-scripts/errormarker.vim'
 "NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
@@ -460,38 +461,7 @@ map <Leader>s <Plug>(operator-decamelize)
 
 
 
-" Package::Hogeからlib/Package/Hoge/配下の一覧のファイルをuniteで表示する
-function! FileOfPackage()
-    let s:root_path = FindBranchRoot()
-    let s:pm_ext    = ".pm"
-
-    let s:save_iskeyword = &iskeyword
-    setlocal iskeyword+=:
-    let s:save_yank_anonymous_reg = @"
-
-    try
-        normal yiw
-        let s:package_name = @"
-        "" check procedure string
-        if (s:package_name !~ '^[_A-Za-z0-9:]\+$')
-            echo 'illegal expression'
-            return
-        endif
-
-    finally
-        "" back setting.
-        let @" = s:save_yank_anonymous_reg
-        let &iskeyword = s:save_iskeyword
-    endt
-    let s:package_path = substitute(s:package_name, '::','/','g')
-    let s:ab_package_path = s:root_path . "/lib/" . s:package_path
-    if (!filereadable(s:ab_package_path) && !filereadable(s:ab_package_path . s:pm_ext))
-        let s:package_path = substitute(s:package_path,'/[^(/)]*$','','g')
-    endif
-
-    execute(printf("Unite file_of_package:%s -input=%s", s:package_path, s:package_path))
-endfunction
-nnoremap ,uf :<C-u>call FileOfPackage()<CR>
+nnoremap ,uf :<C-u>call perl_file_of_package#PerlFileOfPackage()<CR>
 
 " unite ack
 "function! s:escape_visual(...) "{{{
