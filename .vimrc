@@ -1,18 +1,21 @@
 " basic config {{{
 
-" neobundle
-set nocompatible               " be iMproved
-filetype off                   " required!
-filetype plugin indent off     " required!
 
 if has('vim_starting')
+  set nocompatible               " be iMproved
   set runtimepath+=~/.vim/bundle/neobundle.vim/
-  call neobundle#rc(expand('~/.vim/bundle/'))
 endif
+
+call neobundle#rc(expand('~/.vim/bundle/'))
+NeoBundleFetch 'Shougo/neobundle.vim'
+call neobundle#end()
+filetype plugin indent on
+NeoBundleCheck
+
 "NeoBundle 'Shougo/vimproc' " make at local
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'hallettj/jslint.vim'
+" NeoBundle 'hallettj/jslint.vim'
 NeoBundle 'tyru/operator-camelize.vim'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-textobj-user'
@@ -39,14 +42,12 @@ NeoBundle 'mattn/multi-vim'
 NeoBundle 'tomtom/tcomment_vim.git'
 NeoBundle 'jiangmiao/simple-javascript-indenter'
 NeoBundle 'jelera/vim-javascript-syntax'
-NeoBundle 'teramako/jscomplete-vim'
+" NeoBundle 'teramako/jscomplete-vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'vim-scripts/monday'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'itchyny/lightline.vim'
-" local files
-"NeoBundle 'im_control', {'type' : 'nosync', 'base' : '~/.vim/bundle/manual'}
 
 filetype plugin indent on     " required!
 
@@ -108,6 +109,11 @@ highlight TabSpace ctermbg=DarkGreen
 match TabSpace /\t\|\s\+$/
 "" set tab color
 hi TabLineSel ctermbg=DarkMagenta
+
+" fold
+set foldmethod=syntax
+let perl_fold=1
+set foldlevel=100 "Don't autofold anything
 
 "カーソルを行頭、行末で止まらないようにする
 set whichwrap=b,s,h,l,<,>,[,]
@@ -222,7 +228,7 @@ autocmd BufNewFile,BufRead *.yaml,*.yml set filetype=perl
 
 autocmd BufWritePost,FileWritePost *.p[lm] !perl -wc %
 
-au BufWritePost *.pl,*.pm :call ReloadApache()
+" au BufWritePost *.pl,*.pm :call ReloadApache()
 function! ReloadApache()
     call system($HOME. '/bin/restart_apache.pl')
 endfunction
@@ -341,8 +347,8 @@ source $VIMRUNTIME/macros/matchit.vim
 "map ,jst <Esc>:'<,'>! perl ~/bin/js_swell.pl<CR>
 
 " pathogen.vim
-call pathogen#helptags()
-call pathogen#runtime_append_all_bundles()
+" call pathogen#helptags()
+" call pathogen#runtime_append_all_bundles()
 
 
 " 全角スペースの表示
@@ -647,3 +653,21 @@ function! MyMode()
 endfunction
 
 " }}}
+
+" for go
+set rtp+=$GOROOT/misc/vim
+exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
+set completeopt=menu,preview
+
+if exists("g:did_load_filetypes")
+  filetype off
+  filetype plugin indent off
+endif
+set runtimepath+=$GOROOT/misc/vim " replace $GOROOT with the output of: go env GOROOT
+filetype plugin indent on
+syntax on
+autocmd FileType go autocmd BufWritePre <buffer> Fmt
+autocmd FileType go compiler go
+" omni competion
+autocmd FileType go inoremap <C-i> <C-x><C-o>
+autocmd FileType go :map ep <Esc>:!go run %

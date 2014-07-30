@@ -47,6 +47,12 @@ TERM=xterm-256color
 eval $(dircolors -b ~/.dir_color)
 
 #ssh-agent in screen
+# screen起動時にssh-agent設定
+# if [ "$TERM" = "xterm-256color" ]; then
+#     eval `ssh-agent`
+#     ssh-add ~/.ssh/id_rsa
+# fi
+
 agent="$HOME/tmp/ssh-agent-$USER"
 if [ -S "$SSH_AUTH_SOCK" ]; then
     case $SSH_AUTH_SOCK in
@@ -62,7 +68,6 @@ fi
 # User specific aliases and functions
 alias diff='colordiff'
 alias perldoc='env LANG=C perldoc'
-alias cpanm="cpanm -l ~/perl5"
 alias ll="ls -ltr"
 alias la="ls -ltra"
 alias w3m='w3m -cookie'
@@ -171,3 +176,26 @@ RPROMPT='`rprompt-git-current-branch`'
 if [ -f ~/.zshrc_local ]; then
     source ~/.zshrc_local
 fi
+
+# history
+# 履歴ファイルの保存先
+export HISTFILE=${HOME}/.zsh_history
+
+# メモリに保存される履歴の件数
+export HISTSIZE=1000
+
+# 履歴ファイルに保存される履歴の件数
+export SAVEHIST=100000
+
+# 重複を記録しない
+setopt hist_ignore_dups
+
+# 開始と終了を記録
+setopt EXTENDED_HISTORY
+export PATH="$HOME/.plenv/bin:$PATH"
+eval "$(plenv init -)"
+
+# go
+export GOROOT=$HOME/local/go
+export GOPATH=$HOME/local/gocode
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
