@@ -6,13 +6,22 @@ if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#begin(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 call neobundle#end()
 filetype plugin indent on
 NeoBundleCheck
 
 "NeoBundle 'Shougo/vimproc' " make at local
+NeoBundle 'Shougo/vimproc.vim', {
+\ 'build' : {
+\     'windows' : 'tools\\update-dll-mingw',
+\     'cygwin' : 'make -f make_cygwin.mak',
+\     'mac' : 'make -f make_mac.mak',
+\     'linux' : 'make',
+\     'unix' : 'gmake',
+\    },
+\ }
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/unite.vim'
 " NeoBundle 'hallettj/jslint.vim'
@@ -38,7 +47,6 @@ NeoBundle 'nakatakeshi/perl_file_of_package.vim'
 "NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'mattn/webapi-vim'
-NeoBundle 'mattn/multi-vim'
 NeoBundle 'tomtom/tcomment_vim.git'
 NeoBundle 'jiangmiao/simple-javascript-indenter'
 NeoBundle 'jelera/vim-javascript-syntax'
@@ -48,6 +56,9 @@ NeoBundle 'vim-scripts/monday'
 NeoBundle 'rking/ag.vim'
 NeoBundle 'nathanaelkane/vim-indent-guides'
 NeoBundle 'itchyny/lightline.vim'
+" ruby
+NeoBundle 'ngmy/vim-rubocop'
+NeoBundle 'tpope/vim-endwise'
 
 filetype plugin indent on     " required!
 
@@ -663,7 +674,7 @@ if exists("g:did_load_filetypes")
   filetype off
   filetype plugin indent off
 endif
-set runtimepath+=$GOROOT/misc/vim " replace $GOROOT with the output of: go env GOROOT
+"set runtimepath+=$GOROOT/misc/vim " replace $GOROOT with the output of: go env GOROOT
 filetype plugin indent on
 syntax on
 autocmd FileType go autocmd BufWritePre <buffer> Fmt
@@ -671,3 +682,10 @@ autocmd FileType go compiler go
 " omni competion
 autocmd FileType go inoremap <C-i> <C-x><C-o>
 autocmd FileType go :map ep <Esc>:!go run %
+
+
+" for ruby
+" {{{ vim-rubocop
+autocmd FileType ruby :nmap <Leader>r :RuboCop<CR>
+" }}}
+
