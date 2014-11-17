@@ -687,5 +687,6 @@ autocmd FileType go :map ep <Esc>:!go run %
 " for ruby
 " {{{ vim-rubocop
 autocmd FileType ruby :nmap <Leader>r :RuboCop<CR>
+autocmd FileType ruby setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab
 " }}}
 
