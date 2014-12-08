@@ -691,3 +691,7 @@ autocmd FileType ruby :nmap <Leader>r :RuboCop<CR>
 autocmd FileType ruby setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab
 " }}}
 
+" for ctags
+nmap fl :vsp<CR><C-]>
+nmap fi :sp<CR><C-]>
+nmap fo :tabe %<CR><C-]>
