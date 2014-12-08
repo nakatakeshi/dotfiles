@@ -695,3 +695,5 @@ autocmd FileType ruby setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab
 nmap fl :vsp<CR><C-]>
 nmap fi :sp<CR><C-]>
 nmap fo :tabe %<CR><C-]>
+map ge <Esc>:call vimproc#popen2('/usr/local/bin/ctags -R ./ ' . $HOME . '/.rbenv/versions/2.0.0-p481/lib/ruby/gems/2.0.0/gems/')
+
