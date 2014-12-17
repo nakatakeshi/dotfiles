@@ -43,6 +43,7 @@ NeoBundle 'nakatakeshi/.vim'
 NeoBundle 'nakatakeshi/jump2pm.vim'
 NeoBundle 'nakatakeshi/show_github_url.vim'
 NeoBundle 'nakatakeshi/perl_file_of_package.vim'
+NeoBundle 'nakatakeshi/open_model_rb.vim'
 "NeoBundle 'vim-scripts/errormarker.vim'
 "NeoBundle 'scrooloose/syntastic'
 NeoBundle 'Shougo/neocomplcache'
@@ -59,6 +60,8 @@ NeoBundle 'itchyny/lightline.vim'
 " ruby
 NeoBundle 'ngmy/vim-rubocop'
 NeoBundle 'tpope/vim-endwise'
+
+NeoBundle 'rhysd/vim-operator-surround'
 
 filetype plugin indent on     " required!
 
@@ -297,6 +300,8 @@ autocmd FileType perl :noremap ss :call Jump2sub()<ENTER>
 autocmd FileType javascript :noremap ss :call Jump2func()<ENTER>
 autocmd FileType ruby :noremap ss :call Jump2def()<ENTER>
 
+" load spec
+autocmd FileType ruby :noremap <C-t> :call LoadSpec('bel vne')<ENTER>
 " map esc to ctrl + 
 inoremap <C-k> <ESC>
 
@@ -689,6 +694,19 @@ autocmd FileType go :map ep <Esc>:!go run %
 " {{{ vim-rubocop
 autocmd FileType ruby :nmap <Leader>r :RuboCop<CR>
 autocmd FileType ruby setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab
+autocmd FileType ruby :map ,s <Esc>:!PADRINO_FAST_LOADER=1 bundle exec parallel_rspec -n 2 %
+" open_model_rb.vim
+" vertical split and jump to app file in current window
+autocmd FileType ruby :noremap fg :call OpenAppModel('vne')<ENTER>
+" jump to app file in current window
+autocmd FileType ruby :noremap ff :call OpenAppModel('e')<ENTER>
+" split window horizontal, and ...
+autocmd FileType ruby :noremap fd :call OpenAppModel('sp')<ENTER>
+" open tab, and ...
+autocmd FileType ruby :noremap fd :call OpenAppModel('tabe')<ENTER>
+" for visual mode, use OpenAppModelV()
+autocmd FileType ruby :vnoremap fg :call OpenAppModelV('vne')<ENTER>
+
 " }}}
 
 " for ctags
@@ -697,3 +715,25 @@ nmap fi :sp<CR><C-]>
 nmap fo :tabe %<CR><C-]>
 map ge <Esc>:call vimproc#popen2('/usr/local/bin/ctags -R ./ ' . $HOME . '/.rbenv/versions/2.0.0-p481/lib/ruby/gems/2.0.0/gems/')
 
+" for vim-operator-surround
+map <silent>sa <Plug>(operator-surround-append)
+map <silent>sd <Plug>(operator-surround-delete)
+map <silent>sr <Plug>(operator-surround-replace)
+nmap a( saiw(
+nmap a" saiw"
+nmap a' saiw'
+nmap a[ saiw[
+nmap a{ saiw{
+nmap a` saiw`
+nmap d( sda(
+nmap d" sda"
+nmap d' sda'
+nmap d[ sda[
+nmap d{ sda{
+nmap d` sda`
+nmap r( sra(
+nmap r" sra"
+nmap r' sra'
+nmap r[ sra[
+nmap r{ sra{
+nmap r` sra`
