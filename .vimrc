@@ -261,7 +261,7 @@ map <silent> sP :call YanktmpPaste_P()<cr>
 let g:yanktmp_file = $HOME . '/tmp/yanktmp'
 
 " 範囲選択してpasteするとレジスタが書き換わっちゃうのでレジスタ操作
-vnoremap p "_dP
+vnoremap p "0p
 
 " paste yanked string vertically
 vnoremap <C-p> I<C-r>"<ESC><ESC>
