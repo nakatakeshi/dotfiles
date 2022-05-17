@@ -1,69 +1,58 @@
 " basic config {{{
 
-
 if has('vim_starting')
   set nocompatible               " be iMproved
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#begin(expand('~/.vim/bundle/'))
-NeoBundleFetch 'Shougo/neobundle.vim'
-call neobundle#end()
-filetype plugin indent on
-NeoBundleCheck
+" dein.vim settings {{{
+" install dir {{{
+let s:dein_dir = expand('~/.cache/dein')
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
+" }}}
 
-"NeoBundle 'Shougo/vimproc' " make at local
-NeoBundle 'Shougo/vimproc.vim', {
-\ 'build' : {
-\     'windows' : 'tools\\update-dll-mingw',
-\     'cygwin' : 'make -f make_cygwin.mak',
-\     'mac' : 'make -f make_mac.mak',
-\     'linux' : 'make',
-\     'unix' : 'gmake',
-\    },
-\ }
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/unite.vim'
-" NeoBundle 'hallettj/jslint.vim'
-NeoBundle 'tyru/operator-camelize.vim'
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'thinca/vim-visualstar'
-NeoBundle 'vim-scripts/yanktmp.vim'
-NeoBundle 'vim-scripts/Align'
-NeoBundle 'vimtaku/vim-textobj-sigil'
-NeoBundle 't9md/vim-unite-ack'
-NeoBundle 'h1mesuke/textobj-wiw'
-NeoBundle 'kmnk/vim-unite-giti'
-NeoBundle 'mileszs/ack.vim'
-NeoBundle 'vim-scripts/taglist.vim'
-NeoBundle 'hotchpotch/perldoc-vim'
-NeoBundle 'nakatakeshi/.vim'
-NeoBundle 'nakatakeshi/jump2pm.vim'
-NeoBundle 'nakatakeshi/show_github_url.vim'
-NeoBundle 'nakatakeshi/perl_file_of_package.vim'
-NeoBundle 'nakatakeshi/open_model_rb.vim'
-"NeoBundle 'vim-scripts/errormarker.vim'
-"NeoBundle 'scrooloose/syntastic'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'mattn/webapi-vim'
-NeoBundle 'tomtom/tcomment_vim.git'
-NeoBundle 'jiangmiao/simple-javascript-indenter'
-NeoBundle 'jelera/vim-javascript-syntax'
-" NeoBundle 'teramako/jscomplete-vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'vim-scripts/monday'
-NeoBundle 'rking/ag.vim'
-NeoBundle 'nathanaelkane/vim-indent-guides'
-NeoBundle 'itchyny/lightline.vim'
-" ruby
-NeoBundle 'ngmy/vim-rubocop'
-NeoBundle 'tpope/vim-endwise'
+" dein installation check {{{
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . s:dein_repo_dir
+endif
+" }}}
 
-NeoBundle 'rhysd/vim-operator-surround'
+" begin settings {{{
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
 
-filetype plugin indent on     " required!
+  " .toml file
+  let s:rc_dir = expand('~/.vim')
+  if !isdirectory(s:rc_dir)
+    call mkdir(s:rc_dir, 'p')
+  endif
+  let s:toml = s:rc_dir . '/dein.toml'
+
+  " read toml and cache
+  call dein#load_toml(s:toml, {'lazy': 0})
+
+  " end settings
+  call dein#end()
+  call dein#save_state()
+endif
+" }}}
+
+" plugin installation check {{{
+if dein#check_install()
+  call dein#install()
+endif
+" }}}
+
+" plugin remove check {{{
+let s:removed_plugins = dein#check_clean()
+if len(s:removed_plugins) > 0
+  call map(s:removed_plugins, "delete(v:val, 'rf')")
+  call dein#recache_runtimepath()
+endif
+" }}}
+
 
 :syntax enable
 set t_Co=256
@@ -72,53 +61,73 @@ set t_Co=256
 ":colorscheme solarized
 ":colorscheme  desert256
 ":colorscheme  xoria256
-":colorscheme  molokai
+:colorscheme  molokai
 "this
 ":colorscheme calmar256-dark
 "colorscheme wombat256
-:colorscheme slate
-"c¤Îauato indent
+":colorscheme slate
+"cã®auato indent
 ":set cindent
 :set autoindent
-"¥¤¥ó¥¯¥ê¥á¥ó¥¿¥ë¸¡º÷
+"ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ã‚¿ãƒ«æ¤œç´¢
 ":set incsearch
 " scroll
 set scrolloff=20
-"¸¡º÷·ë²Ì¿§Ê¬¤±
+"æ¤œç´¢çµæœè‰²åˆ†ã‘
 :set hlsearch
-"clipboard¶¦Í­
-:set clipboard+=autoselect
-:set clipboard+=unnamed
-"¥·¥ç¡¼¥È¥«¥Ã¥È·Ï
+
+" visualãƒ¢ãƒ¼ãƒ‰ã§è¤‡æ•°å›pasteã™ã‚‹å ´åˆ
+xnoremap p "_dP
+
+"clipboardå…±æœ‰
+" :set clipboard+=autoselect
+" :set clipboard+=unnamed
+"ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆç³»
 :ab #s ##############################################
-"¥¯¥ê¥Ã¥×¥Ü¡¼¥É¤òWindows¤ÈÏ¢·È
-set clipboard=unnamed
-" VisualÁªÂò¤ÇÁªÂò¤µ¤ì¤¿¥Æ¥­¥¹¥È¤¬¡¢¼«Æ°Åª¤Ë¥¯¥ê¥Ã¥×¥Ü¡¼¥É¥ì¥¸¥¹¥¿ "*" ¤Ë¥³¥Ô¡¼¤µ¤ì¤ë¡£
-:set guioptions+=a
-"backspace¥­¡¼
+
+
+" function! Put_text_without_override_register()
+"   let line_len = strlen(getline('.'))
+"   execute "normal! `>"
+"   let col_loc = col('.')
+"   execute 'normal! gv"_x'
+"   if line_len == col_loc
+"     execute 'normal! p'
+"   else
+"     execute 'normal! P'
+"   endif
+" endfunction
+" xnoremap <silent> p :call Put_text_without_override_register()<CR>
+
+" :set clipboard=
+"ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã‚’Windowsã¨é€£æº
+"set clipboard=unnamed
+" Visualé¸æŠã§é¸æŠã•ã‚ŒãŸãƒ†ã‚­ã‚¹ãƒˆãŒã€è‡ªå‹•çš„ã«ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ãƒ¬ã‚¸ã‚¹ã‚¿ "*" ã«ã‚³ãƒ”ãƒ¼ã•ã‚Œã‚‹ã€‚
+" :set guioptions+=a
+"backspaceã‚­ãƒ¼
 ":set backspace=2
 :set backspace=indent,eol,start
-"¹ÔÈÖ¹æ¤òÉ½¼¨¤¹¤ë
+"è¡Œç•ªå·ã‚’è¡¨ç¤ºã™ã‚‹
 set number
-" ¥«¡¼¥½¥ë¤¬²¿¹ÔÌÜ¤Î²¿ÎóÌÜ¤ËÃÖ¤«¤ì¤Æ¤¤¤ë¤«¤òÉ½¼¨¤¹¤ë¡£¡ÊÍ­¸ú:ruler/Ìµ¸ú:noruler¡Ë
+" ã‚«ãƒ¼ã‚½ãƒ«ãŒä½•è¡Œç›®ã®ä½•åˆ—ç›®ã«ç½®ã‹ã‚Œã¦ã„ã‚‹ã‹ã‚’è¡¨ç¤ºã™ã‚‹ã€‚ï¼ˆæœ‰åŠ¹:ruler/ç„¡åŠ¹:norulerï¼‰
 :set ruler
-" ¥·¥Õ¥È°ÜÆ°Éı¤ò¤ÎshiftwidthÃÍ¤ÎÇÜ¿ô¤Ë´İ¤á¤ë
+" ã‚·ãƒ•ãƒˆç§»å‹•å¹…ã‚’ã®shiftwidthå€¤ã®å€æ•°ã«ä¸¸ã‚ã‚‹
 :set shiftround
-"¥·¥Õ¥È°ÜÆ°Éı ¥¤¥ó¥Ç¥ó¥È¤µ¤ì¤¿tab¤Î¸«¤¿ÌÜ¤Î¤Ê¤¬¤µ
+"ã‚·ãƒ•ãƒˆç§»å‹•å¹… ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã•ã‚ŒãŸtabã®è¦‹ãŸç›®ã®ãªãŒã•
 set shiftwidth=4
-" Insert¥â¡¼¥É¤Ç <Tab> ¤òÁŞÆş¤¹¤ë¤È¤­¡¢Âå¤ï¤ê¤ËÅ¬ÀÚ¤Ê¿ô¤Î¶õÇò¤ò»È¤¦¡£¡ÊÍ­¸ú:expandtab/Ìµ¸ú:noexpandtab¡Ë
+" Insertãƒ¢ãƒ¼ãƒ‰ã§ <Tab> ã‚’æŒ¿å…¥ã™ã‚‹ã¨ãã€ä»£ã‚ã‚Šã«é©åˆ‡ãªæ•°ã®ç©ºç™½ã‚’ä½¿ã†ã€‚ï¼ˆæœ‰åŠ¹:expandtab/ç„¡åŠ¹:noexpandtabï¼‰
 :set expandtab
-" ¤¿¤Ş¤Ënoexpandtab¤Ë¤Ê¤ê¤ä¤¬¤ë¤Î¤Çmap
+" ãŸã¾ã«noexpandtabã«ãªã‚Šã‚„ãŒã‚‹ã®ã§map
 nnoremap ex :<C-u>:set expandtab<CR>
-"ÊÄ¤¸³ç¸Ì¤¬ÆşÎÏ¤µ¤ì¤¿¤È¤­¡¢ÂĞ±ş¤¹¤ë³ç¸Ì¤òÉ½¼¨¤¹¤ë
+"é–‰ã˜æ‹¬å¼§ãŒå…¥åŠ›ã•ã‚ŒãŸã¨ãã€å¯¾å¿œã™ã‚‹æ‹¬å¼§ã‚’è¡¨ç¤ºã™ã‚‹
 set showmatch
-"¥Õ¥¡¥¤¥ëÆâ¤Î <Tab> ¤¬ÂĞ±ş¤¹¤ë¶õÇò¤Î¿ô ¥Õ¥¡¥¤¥ëÆâ¤Îtab¤Î¤ß¤¿¤á¤Î¤Ê¤¬¤µ
+"ãƒ•ã‚¡ã‚¤ãƒ«å†…ã® <Tab> ãŒå¯¾å¿œã™ã‚‹ç©ºç™½ã®æ•° ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®tabã®ã¿ãŸã‚ã®ãªãŒã•
 set tabstop=4
-"tab¤òÁŞÆş¤·¤¿ºİ¤Î¥¹¥Ú¡¼¥¹¤Î¿ô
+"tabã‚’æŒ¿å…¥ã—ãŸéš›ã®ã‚¹ãƒšãƒ¼ã‚¹ã®æ•°
 set softtabstop=4
-"¥¿¥ÖÊ¸»ú¤òÉ½¼¨
+"ã‚¿ãƒ–æ–‡å­—ã‚’è¡¨ç¤º
 set lcs=tab:>.,eol:$,trail:_,extends:\
-"¹ÔÆ¬¤Î¥¿¥Ö¤òÉ½¼¨
+"è¡Œé ­ã®ã‚¿ãƒ–ã‚’è¡¨ç¤º
 highlight TabSpace ctermbg=DarkGreen
 match TabSpace /\t\|\s\+$/
 "" set tab color
@@ -129,32 +138,37 @@ set foldmethod=syntax
 let perl_fold=1
 set foldlevel=100 "Don't autofold anything
 
-"¥«¡¼¥½¥ë¤ò¹ÔÆ¬¡¢¹ÔËö¤Ç»ß¤Ş¤é¤Ê¤¤¤è¤¦¤Ë¤¹¤ë
+"ã‚«ãƒ¼ã‚½ãƒ«ã‚’è¡Œé ­ã€è¡Œæœ«ã§æ­¢ã¾ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
 set whichwrap=b,s,h,l,<,>,[,]
-" ÆşÎÏ¤µ¤ì¤Æ¤¤¤ë¥Æ¥­¥¹¥È¤ÎºÇÂçÉı¡£¹Ô¤¬¤½¤ì¤è¤êÄ¹¤¯¤Ê¤ë¤È¡¢¤³¤ÎÉı¤òÄ¶¤¨¤Ê¤¤¤è¤¦¤Ë¶õÇò¤Î¸å¤Ç²ş¹Ô¤µ¤ì¤ë¡£ÃÍ¤ò 0 ¤ËÀßÄê¤¹¤ë¤ÈÌµ¸ú¤Ë¤Ê¤ë¡£
+" å…¥åŠ›ã•ã‚Œã¦ã„ã‚‹ãƒ†ã‚­ã‚¹ãƒˆã®æœ€å¤§å¹…ã€‚è¡ŒãŒãã‚Œã‚ˆã‚Šé•·ããªã‚‹ã¨ã€ã“ã®å¹…ã‚’è¶…ãˆãªã„ã‚ˆã†ã«ç©ºç™½ã®å¾Œã§æ”¹è¡Œã•ã‚Œã‚‹ã€‚å€¤ã‚’ 0 ã«è¨­å®šã™ã‚‹ã¨ç„¡åŠ¹ã«ãªã‚‹ã€‚
 :set textwidth=0
 
-" ½ÄÊ¬³ä¤ò¤¹¤ëºİ¡¢¿·¤·¤¤¥¦¥£¥ó¥É¥¦¤ò±¦Â¦¤Ëºî¤ë
+
+" http://itchyny.hatenablog.com/entry/2014/12/25/090000
+" 1è¡ŒãŒé•·éãã‚‹ã¨ãã«@@@@ã«ãªã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
+set display=lastline
+
+" ç¸¦åˆ†å‰²ã‚’ã™ã‚‹éš›ã€æ–°ã—ã„ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’å³å´ã«ä½œã‚‹
 set splitright
 
-"ÊÑ¹¹Ãæ¤Î¥Õ¥¡¥¤¥ë¤Ç¤â¡¢ÊİÂ¸¤·¤Ê¤¤¤ÇÂ¾¤Î¥Õ¥¡¥¤¥ë¤òÉ½¼¨
+"å¤‰æ›´ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§ã‚‚ã€ä¿å­˜ã—ãªã„ã§ä»–ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¡¨ç¤º
 set hidden
 
-" ¥Ş¥¦¥¹¥â¡¼¥ÉÍ­¸ú
+" ãƒã‚¦ã‚¹ãƒ¢ãƒ¼ãƒ‰æœ‰åŠ¹
 set mouse=a
-" screenÂĞ±ş
+" screenå¯¾å¿œ
 set ttymouse=xterm2
 
-" °ìÅÙ¤ËÊ£¿ô³«¤±¤ëtab¤Î¸Ä¿ô
+" ä¸€åº¦ã«è¤‡æ•°é–‹ã‘ã‚‹tabã®å€‹æ•°
 set tabpagemax =100
 
-" ¹ÔËö¤Î¥¹¥Ú¡¼¥¹¥Ï¥¤¥é¥¤¥È
-set list
-set listchars=tab:>-,trail:-,nbsp:-,extends:>,precedes:<,
+" è¡Œæœ«ã®ã‚¹ãƒšãƒ¼ã‚¹ãƒã‚¤ãƒ©ã‚¤ãƒˆ
+"set list
+"set listchars=tab:>-,trail:-,nbsp:-,extends:>,precedes:<,
 
-" ¥«¡¼¥½¥ë¹Ô¤ò¥Ï¥¤¥é¥¤¥È
+" ã‚«ãƒ¼ã‚½ãƒ«è¡Œã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆ
 "set cursorline
-" ¥«¥ì¥ó¥È¥¦¥£¥ó¥É¥¦¤Ë¤Î¤ß·ÓÀş¤ò°ú¤¯
+" ã‚«ãƒ¬ãƒ³ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ã®ã¿ç½«ç·šã‚’å¼•ã
 "augroup cch
 "  autocmd! cch
 "  autocmd WinLeave * set nocursorline
@@ -166,11 +180,11 @@ set listchars=tab:>-,trail:-,nbsp:-,extends:>,precedes:<,
 "highlight CursorLine ctermbg=black guibg=black
 
 
-"¥¦¥£¥ó¥É¥¦¤òºÇÂç²½¤·¤Æµ¯Æ°
+"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æœ€å¤§åŒ–ã—ã¦èµ·å‹•
 "au GUIEnter * simalt ~x
 
 """"""""""""""""""""""""""""""
-"ÁŞÆş¥â¡¼¥É»ş¡¢¥¹¥Æ¡¼¥¿¥¹¥é¥¤¥ó¤Î¿§¤òÊÑ¹¹
+"æŒ¿å…¥ãƒ¢ãƒ¼ãƒ‰æ™‚ã€ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ©ã‚¤ãƒ³ã®è‰²ã‚’å¤‰æ›´
 """"""""""""""""""""""""""""""
 let g:hi_insert = 'highlight StatusLine guifg=darkblue guibg=darkyellow gui=none ctermfg=blue ctermbg=yellow cterm=none'
 
@@ -202,25 +216,25 @@ function! s:GetHighlight(hi)
   return hl
 endfunction
 
-" ºÇ²¼¥¦¥£¥ó¥É¥¦¤Ë¤¤¤Ä¥¹¥Æ¡¼¥¿¥¹¹Ô¤¬É½¼¨¤µ¤ì¤ë¤«¤òÀßÄê¤¹¤ë¡£
-"               0: Á´¤¯É½¼¨¤·¤Ê¤¤
-"               1: ¥¦¥£¥ó¥É¥¦¤Î¿ô¤¬2°Ê¾å¤Î¤È¤­¤Î¤ßÉ½¼¨
-"               2: ¾ï¤ËÉ½¼¨
+" æœ€ä¸‹ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«ã„ã¤ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡ŒãŒè¡¨ç¤ºã•ã‚Œã‚‹ã‹ã‚’è¨­å®šã™ã‚‹ã€‚
+"               0: å…¨ãè¡¨ç¤ºã—ãªã„
+"               1: ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æ•°ãŒ2ä»¥ä¸Šã®ã¨ãã®ã¿è¡¨ç¤º
+"               2: å¸¸ã«è¡¨ç¤º
 :set laststatus=2
-" ¥¹¥Æ¡¼¥¿¥¹¥é¥¤¥óÉ½¼¨
+" ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ©ã‚¤ãƒ³è¡¨ç¤º
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
-" ¥³¥Ş¥ó¥É (¤Î°ìÉô) ¤ò²èÌÌ¤ÎºÇ²¼¹Ô¤ËÉ½¼¨¤¹¤ë¡£¡ÊÍ­¸ú:showcmd/Ìµ¸ú:noshowcmd¡Ë
+" ã‚³ãƒãƒ³ãƒ‰ (ã®ä¸€éƒ¨) ã‚’ç”»é¢ã®æœ€ä¸‹è¡Œã«è¡¨ç¤ºã™ã‚‹ã€‚ï¼ˆæœ‰åŠ¹:showcmd/ç„¡åŠ¹:noshowcmdï¼‰
 :set showcmd
 
 if &term =~ "screen"
-   " screen Buffer ÀÚ¤êÂØ¤¨¤Ç screen ¤Ë¥Õ¥¡¥¤¥ëÌ¾¤òÉ½¼¨
+   " screen Buffer åˆ‡ã‚Šæ›¿ãˆã§ screen ã«ãƒ•ã‚¡ã‚¤ãƒ«åã‚’è¡¨ç¤º
    autocmd BufEnter * if bufname("") !~ "^\[A-Za-z0-9\]*://" | silent!  exe '!echo -n "^[kv:%^[\\"' | endif
    autocmd VimLeave * silent!  exe '!echo -n "^[k`basename $PWD`^[\\"'
 endif
 
 " }}}
 
-" Ê¸»ú¥³¡¼¥É´ØÏ¢ {{{
+" æ–‡å­—ã‚³ãƒ¼ãƒ‰é–¢é€£ {{{
 
 set fileencodings=utf-8,iso-2022-jp-3,iso-2022-jp,euc-jisx0213,euc-jp,ucs-bom,euc-jp,eucjp-ms,cp932
 set fileencoding=utf-8
@@ -230,14 +244,14 @@ set fileencoding=utf-8
 
 " perl config {{{
 
-"¥³¥ó¥Ñ¥¤¥é¤Î»ØÄê
-autocmd FileType perl,cgi :compiler perl  
+"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã®æŒ‡å®š
+autocmd FileType perl,cgi :compiler perl
 
 " add plack path
 autocmd FileType perl :setlocal path+=/usr/local/bundle-plack/lib/perl5/,/usr/local/bundle-plack/lib/perl5/x86_64-linux-thread-multi/,lib/
-" .t¥Õ¥¡¥¤¥ë¤âperl¤ÎsyntaxÉ½¼¨¤Ë¤¹¤ë
+" .tãƒ•ã‚¡ã‚¤ãƒ«ã‚‚perlã®syntaxè¡¨ç¤ºã«ã™ã‚‹
 autocmd BufNewFile,BufRead *.t set filetype=perl
-" .yaml¥Õ¥¡¥¤¥ë¤âperl¤ÎsyntaxÉ½¼¨¤Ë¤¹¤ë
+" .yamlãƒ•ã‚¡ã‚¤ãƒ«ã‚‚perlã®syntaxè¡¨ç¤ºã«ã™ã‚‹
 autocmd BufNewFile,BufRead *.yaml,*.yml set filetype=perl
 
 autocmd BufWritePost,FileWritePost *.p[lm] !perl -wc %
@@ -257,11 +271,12 @@ map ,ptv <Esc>:'<,'>! perltidy<CR>
 "yanktmp.vim
 map <silent> sy :call YanktmpYank()<cr>
 map <silent> sp :call YanktmpPaste_p()<cr>
-map <silent> sP :call YanktmpPaste_P()<cr> 
+map <silent> sP :call YanktmpPaste_P()<cr>
 let g:yanktmp_file = $HOME . '/tmp/yanktmp'
 
-" ÈÏ°ÏÁªÂò¤·¤Æpaste¤¹¤ë¤È¥ì¥¸¥¹¥¿¤¬½ñ¤­´¹¤ï¤Ã¤Á¤ã¤¦¤Î¤Ç¥ì¥¸¥¹¥¿Áàºî
-vnoremap p "0p
+" ç¯„å›²é¸æŠã—ã¦pasteã™ã‚‹ã¨ãƒ¬ã‚¸ã‚¹ã‚¿ãŒæ›¸ãæ›ã‚ã£ã¡ã‚ƒã†ã®ã§ãƒ¬ã‚¸ã‚¹ã‚¿æ“ä½œ
+" vnoremap p "0p
+" vnoremap x "_x
 
 " paste yanked string vertically
 vnoremap <C-p> I<C-r>"<ESC><ESC>
@@ -277,7 +292,7 @@ autocmd FileType perl :map et <Esc>:!perl -w -I lib -I t/inc %<Enter>
 vmap <tab> >gv
 vmap <s-tab> <gv
 
-" ½ÄÊ¬³ä¤·¤¿¸å¡¢¥«¡¼¥½¥ë²¼¤Î¥¿¥°¤Ø¥¸¥ã¥ó¥×
+" ç¸¦åˆ†å‰²ã—ãŸå¾Œã€ã‚«ãƒ¼ã‚½ãƒ«ä¸‹ã®ã‚¿ã‚°ã¸ã‚¸ãƒ£ãƒ³ãƒ—
 noremap sd :vsplit<ENTER><C-]>
 
 " for search_pm.vim
@@ -298,11 +313,11 @@ let search_lib_dir_opening = 'lib/,/usr/local/bundle-plack/lib/perl5/,/usr/local
 
 autocmd FileType perl :noremap ss :call Jump2sub()<ENTER>
 autocmd FileType javascript :noremap ss :call Jump2func()<ENTER>
-autocmd FileType ruby :noremap ss :call Jump2def()<ENTER>
+autocmd FileType ruby,eruby :noremap ss :call Jump2def()<ENTER>
 
 " load spec
 autocmd FileType ruby :noremap <C-t> :call LoadSpec('bel vne')<ENTER>
-" map esc to ctrl + 
+" map esc to ctrl +
 inoremap <C-k> <ESC>
 
 nmap <silent> <buffer> em :PerlUseInsertionCWord<CR>
@@ -322,16 +337,16 @@ map te <Esc>:tabe<Space>
 " http://vim-users.jp/2011/04/hack214/
 noremap ) t)
 noremap ( t(
-" °ìÈÖºÇ¸å¤ËÊÔ½¸¤·¤Æ¤¤¤¿²Õ½ê¤òÁªÂò
+" ä¸€ç•ªæœ€å¾Œã«ç·¨é›†ã—ã¦ã„ãŸç®‡æ‰€ã‚’é¸æŠ
 nnoremap gc `[v`]<Left>
 
-" ¥³¥Ş¥ó¥É¥â¡¼¥É»ş¤Ë¥«¡¼¥½¥ë°ÜÆ°¤¹¤ë¤Î¤ËÊØÍø¡¼
+" ã‚³ãƒãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰æ™‚ã«ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•ã™ã‚‹ã®ã«ä¾¿åˆ©ãƒ¼
 map! <C-a> <Home>
 map! <C-e> <End>
 map! <C-f> <Right>
 map! <C-b> <Left>
 map! <C-V> <C-R>"
-" *¸¡º÷»ş¤Ë¼¡¤Ë¹Ô¤«¤Ê¤¤¤è¤¦¤Ë¤¹¤ë
+" *æ¤œç´¢æ™‚ã«æ¬¡ã«è¡Œã‹ãªã„ã‚ˆã†ã«ã™ã‚‹
 nnoremap * *N
 
 " home end
@@ -343,13 +358,13 @@ inoremap <C-e> <End>
 " del
 inoremap <C-l> <Del>
 
-" ¥³¥Ş¥ó¥É¥â¡¼¥É¤ÇÊÄ¤¸¤ë
+" ã‚³ãƒãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã§é–‰ã˜ã‚‹
 noremap fuck :qa!<CR>
 noremap q :q<CR>
-" ¥³¥Ş¥ó¥É¥â¡¼¥É¤Çsave
+" ã‚³ãƒãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰ã§save
 noremap ; :w<CR>
 
-" set paste Æş¤ìÂØ¤¨
+" set paste å…¥ã‚Œæ›¿ãˆ
 nmap <Leader>1 <SID>(toggle-paste)
 nnoremap <SID>(toggle-paste)          :<C-u>set paste!<CR>
 
@@ -360,7 +375,7 @@ nnoremap <SID>(toggle-paste)          :<C-u>set paste!<CR>
 
 source $VIMRUNTIME/macros/matchit.vim
 
-":%! ~/bin/js_swell.pl¤ÇÀ°·Á ÈùÌ¯
+":%! ~/bin/js_swell.plã§æ•´å½¢ å¾®å¦™
 "map ,jst <Esc>:'<,'>! perl ~/bin/js_swell.pl<CR>
 
 " pathogen.vim
@@ -368,101 +383,47 @@ source $VIMRUNTIME/macros/matchit.vim
 " call pathogen#runtime_append_all_bundles()
 
 
-" Á´³Ñ¥¹¥Ú¡¼¥¹¤ÎÉ½¼¨
+" å…¨è§’ã‚¹ãƒšãƒ¼ã‚¹ã®è¡¨ç¤º
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=darkgray
-match ZenkakuSpace /¡¡/
+match ZenkakuSpace /ã€€/
 
 """ unite.vim
 " window height
 let g:unite_winheight=10
-" ¥Ğ¥Ã¥Õ¥¡°ìÍ÷
+" ãƒãƒƒãƒ•ã‚¡ä¸€è¦§
 nmap <silent> ,ub :<C-u>Unite -no-quit -immediately buffer<CR>
-" ¸½¥Ğ¥Ã¥Õ¥¡¤«¤é¤Î¥Õ¥¡¥¤¥ë°ìÍ÷
+" ç¾ãƒãƒƒãƒ•ã‚¡ã‹ã‚‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 nmap <silent> ,uwb :<C-u>UniteWithBufferDir -no-quit -immediately -buffer-name=files file<CR>
-" ¥«¥ì¥ó¥ÈDir¤«¤é¤Î¥Õ¥¡¥¤¥ë°ìÍ÷
+" ã‚«ãƒ¬ãƒ³ãƒˆDirã‹ã‚‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 nmap <silent> ,uwc :<C-u>UniteWithBufferDir -no-quit -immediately -buffer-name=files file<CR>
-" ºÇ¶á»ÈÍÑ¤·¤¿¥Õ¥¡¥¤¥ë°ìÍ÷
+" æœ€è¿‘ä½¿ç”¨ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 nmap <silent> ,um :<C-u>Unite -no-quit -immediately file_mru<CR>
-" ¥ì¥¸¥¹¥¿°ìÍ÷
+" ãƒ¬ã‚¸ã‚¹ã‚¿ä¸€è¦§
 nmap <silent> ,ur :<C-u>Unite -no-quit -immediately -buffer-name=register register<CR>
-" ¾ïÍÑ¥»¥Ã¥È
+" å¸¸ç”¨ã‚»ãƒƒãƒˆ
 nmap <silent> ,uu :<C-u>Unite -no-quit -immediately buffer file_mru<CR>
-" Á´Éô¾è¤»
+" å…¨éƒ¨ä¹—ã›
 nmap <silent> ,ua :<C-u>UniteWithBufferDir -no-quit -immediately -buffer-name=files buffer file_mru bookmark file<CR>
-
-" unite-neco {{{
-let s:unite_source = {'name': 'neco'}
-
-function! s:unite_source.gather_candidates(args, context)
-  let necos = [
-        \ "~(-'_'-) goes right",
-        \ "~(-'_'-) goes right and left",
-        \ "~(-'_'-) goes right quickly",
-        \ "~(-'_'-) skips right",
-        \ "~(-'_'-)  -8(*'_'*) go right and left",
-        \ "(=' .' ) ~w",
-        \ ]
-  return map(necos, '{
-        \ "word": v:val,
-        \ "source": "neco",
-        \ "kind": "command",
-        \ "action__command": "Neco " . v:key,
-        \ }')
-endfunction
 
 "function! unite#sources#locate#define()
 "  return executable('locate') ? s:unite_source : []
 "endfunction
-call unite#define_source(s:unite_source)
 
 " }}}
 
-" Neocomplecache {{{
-"µ¯Æ°»ş¤ËÍ­¸ú
-let g:neocomplcache_enable_at_startup = 1
-"¥İ¥Ã¥×¥¢¥Ã¥×¥á¥Ë¥å¡¼¤ÇÉ½¼¨¤µ¤ì¤ë¸õÊä¤Î¿ô¡£½é´üÃÍ¤Ï100
-let g:neocomplcache_max_list = 20
-"¼«Æ°Êä´°¤ò¹Ô¤¦ÆşÎÏ¿ô¤òÀßÄê¡£½é´üÃÍ¤Ï2
-let g:neocomplcache_auto_completion_start_length = 2
-"¼êÆ°Êä´°»ş¤ËÊä´°¤ò¹Ô¤¦ÆşÎÏ¿ô¤òÀ©¸æ¡£ÃÍ¤ò¾®¤µ¤¯¤¹¤ë¤ÈÊ¸»ú¤Îºï½ü»ş¤Ë½Å¤¯¤Ê¤ë
-let g:neocomplcache_manual_completion_start_length = 3
-"¥Ğ¥Ã¥Õ¥¡¤ä¼­½ñ¥Õ¥¡¥¤¥ëÃæ¤Ç¡¢Êä´°¤ÎÂĞ¾İ¤È¤Ê¤ë¥­¡¼¥ï¡¼¥É¤ÎºÇ¾®Ä¹¤µ¡£½é´üÃÍ¤Ï4¡£
-let g:neocomplcache_min_keyword_length = 4
-"¥·¥ó¥¿¥Ã¥¯¥¹¥Õ¥¡¥¤¥ëÃæ¤Ç¡¢Êä´°¤ÎÂĞ¾İ¤È¤Ê¤ë¥­¡¼¥ï¡¼¥É¤ÎºÇ¾®Ä¹¤µ¡£½é´üÃÍ¤Ï4¡£
-let g:neocomplcache_min_syntax_length = 4
-"1:Êä´°¸õÊä¸¡º÷»ş¤ËÂçÊ¸»ú¡¦¾®Ê¸»ú¤òÌµ»ë¤¹¤ë
-let g:neocomplcache_enable_ignore_case = 1
-"ÆşÎÏ¤ËÂçÊ¸»ú¤¬ÆşÎÏ¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¡¢ÂçÊ¸»ú¾®Ê¸»ú¤Î¶èÊÌ¤ò¤¹¤ë
-let g:neocomplcache_enable_smart_case = 1
-"DT¤ÈÆşÎÏ¤¹¤ë¤ÈD*T*¤È²ò¼á¤µ¤ì¡¢DateTimeÅù¤Ë¥Ş¥Ã¥Á¤¹¤ë¡£
-let g:neocomplcache_enable_camel_case_completion = 0
-"¥¢¥ó¥À¡¼¥Ğ¡¼¤ò¶èÀÚ¤ê¤È¤·¤¿¤¢¤¤¤Ş¤¤¸¡º÷¤ò¹Ô¤¦¤«¤É¤¦¤«¡£
-"m_s¤ÈÆşÎÏ¤¹¤ë¤Èm*_s¤È²ò¼á¤µ¤ì¡¢mb_substrÅù¤Ë¥Ş¥Ã¥Á¤¹¤ë¡£
-let g:neocomplcache_enable_underbar_completion = 0
-" <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-"inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-" Or set this.
-let g:neocomplcache_enable_cursor_hold_i = 1
-" Or set this.
-let g:neocomplcache_enable_insert_char_pre = 1
-
-"¹ÔÆ¬¤Î¥¹¥Ú¡¼¥¹¤ÎÏ¢Â³¤ò¥Ï¥¤¥é¥¤¥È¤µ¤»¤ë
-"TabÊ¸»ú¤â¶èÊÌ¤µ¤ì¤º¤Ë¥Ï¥¤¥é¥¤¥È¤µ¤ì¤ë¤Î¤Ç¡¢¶èÊÌ¤·¤¿¤¤¤È¤­¤ÏTabÊ¸»ú¤ÎÉ½¼¨¤òÊÌ¤Ë
-"ÀßÄê¤¹¤ëÉ¬Í×¤¬¤¢¤ë¡£
+"è¡Œé ­ã®ã‚¹ãƒšãƒ¼ã‚¹ã®é€£ç¶šã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆã•ã›ã‚‹
+"Tabæ–‡å­—ã‚‚åŒºåˆ¥ã•ã‚Œãšã«ãƒã‚¤ãƒ©ã‚¤ãƒˆã•ã‚Œã‚‹ã®ã§ã€åŒºåˆ¥ã—ãŸã„ã¨ãã¯Tabæ–‡å­—ã®è¡¨ç¤ºã‚’åˆ¥ã«
+"è¨­å®šã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
 function! SOLSpaceHilight()
     syntax match SOLSpace "^\s\+" display containedin=ALL
     highlight SOLSpace term=reverse cterm=none ctermbg=242
 endf
-"Á´³Ñ¥¹¥Ú¡¼¥¹¤ò¥Ï¥¤¥é¥¤¥È¤µ¤»¤ë¡£
+"å…¨è§’ã‚¹ãƒšãƒ¼ã‚¹ã‚’ãƒã‚¤ãƒ©ã‚¤ãƒˆã•ã›ã‚‹ã€‚
 function! JISX0208SpaceHilight()
-    syntax match JISX0208Space "¡¡" display containedin=ALL
+    syntax match JISX0208Space "ã€€" display containedin=ALL
     highlight JISX0208Space term=reverse cterm=none ctermbg=242
 endf
-"syntax¤ÎÍ­Ìµ¤ò¥Á¥§¥Ã¥¯¤·¡¢¿·µ¬¥Ğ¥Ã¥Õ¥¡¤È¿·µ¬ÆÉ¤ß¹ş¤ß»ş¤Ë¥Ï¥¤¥é¥¤¥È¤µ¤»¤ë
+"syntaxã®æœ‰ç„¡ã‚’ãƒã‚§ãƒƒã‚¯ã—ã€æ–°è¦ãƒãƒƒãƒ•ã‚¡ã¨æ–°è¦èª­ã¿è¾¼ã¿æ™‚ã«ãƒã‚¤ãƒ©ã‚¤ãƒˆã•ã›ã‚‹
 if has("syntax")
 "    syntax on
         augroup invisible
@@ -512,7 +473,7 @@ nnoremap ,uf :<C-u>call perl_file_of_package#PerlFileOfPackage()<CR>
 "call unite#custom_filters('ack', ['matcher_default', 'sorter_default', 'converter_ack_shortcut'])
 
 
-" Perldoc¤ò¤è¤Ö
+" Perldocã‚’ã‚ˆã¶
 function! PerldocNow()
     let s:save_iskeyword = &iskeyword
     setlocal iskeyword+=:
@@ -559,14 +520,12 @@ autocmd BufRead,BufNewFile *.md   set filetype=mkd
 " }}}
 
 " Simple-Javascript-Indenter
-" ¤³¤ÎÀßÄêÆş¤ì¤ë¤Èshiftwidth¤ò1¤Ë¤·¤Æ¥¤¥ó¥Ç¥ó¥È¤·¤Æ¤¯¤ì¤ë
+" ã“ã®è¨­å®šå…¥ã‚Œã‚‹ã¨shiftwidthã‚’1ã«ã—ã¦ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã—ã¦ãã‚Œã‚‹
 let g:SimpleJsIndenter_BriefMode = 1
-" ¤³¤ÎÀßÄêÆş¤ì¤ë¤Èswitch¤Î¥¤¥ó¥Ç¥ó¥È¤¬¤¤¤¯¤é¤«¥Ş¥·¤Ë
+" ã“ã®è¨­å®šå…¥ã‚Œã‚‹ã¨switchã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒã„ãã‚‰ã‹ãƒã‚·ã«
 let g:SimpleJsIndenter_CaseIndentLevel = -1
 
-" vim-javascript-syntax
-au FileType javascript call JavaScriptFold()
-" ÀŞ¤ê¾ö¤ß¤·¤Á¤ã¤¦¤Î¤Ç²óÈò
+" æŠ˜ã‚Šç•³ã¿ã—ã¡ã‚ƒã†ã®ã§å›é¿
 set foldlevel=100
 
 
@@ -588,19 +547,19 @@ nmap <silent> ,gl :<C-u>Glog<CR>
 "
 noremap gu :call GithubUrl()<enter>
 " vim-indent-guides{{{
-" vimÎ©¤Á¾å¤²¤¿¤È¤­¤Ë¡¢¼«Æ°Åª¤Ëvim-indent-guides¤ò¥ª¥ó¤Ë¤¹¤ë
+" vimç«‹ã¡ä¸Šã’ãŸã¨ãã«ã€è‡ªå‹•çš„ã«vim-indent-guidesã‚’ã‚ªãƒ³ã«ã™ã‚‹
 let g:indent_guides_enable_on_vim_startup=1
-" ¥¬¥¤¥É¤ò¥¹¥¿¡¼¥È¤¹¤ë¥¤¥ó¥Ç¥ó¥È¤ÎÎÌ
+" ã‚¬ã‚¤ãƒ‰ã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã®é‡
 let g:indent_guides_start_level=2
-" ¼«Æ°¥«¥é¡¼¤òÌµ¸ú¤Ë¤¹¤ë
+" è‡ªå‹•ã‚«ãƒ©ãƒ¼ã‚’ç„¡åŠ¹ã«ã™ã‚‹
 let g:indent_guides_auto_colors=0
-" ´ñ¿ô¥¤¥ó¥Ç¥ó¥È¤Î¥«¥é¡¼
+" å¥‡æ•°ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#262626 ctermbg=gray
-" ¶ö¿ô¥¤¥ó¥Ç¥ó¥È¤Î¥«¥é¡¼
+" å¶æ•°ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã®ã‚«ãƒ©ãƒ¼
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#3c3c3c ctermbg=darkgray
-" ¥Ï¥¤¥é¥¤¥È¿§¤ÎÊÑ²½¤ÎÉı
+" ãƒã‚¤ãƒ©ã‚¤ãƒˆè‰²ã®å¤‰åŒ–ã®å¹…
 let g:indent_guides_color_change_percent = 30
-" ¥¬¥¤¥É¤ÎÉı
+" ã‚¬ã‚¤ãƒ‰ã®å¹…
 let g:indent_guides_guide_size = 1
 " }}}
 
@@ -672,42 +631,41 @@ endfunction
 " }}}
 
 " for go
-set rtp+=$GOROOT/misc/vim
-exe "set rtp+=".globpath($GOPATH, "src/github.com/nsf/gocode/vim")
-set completeopt=menu,preview
-
-if exists("g:did_load_filetypes")
-  filetype off
-  filetype plugin indent off
-endif
-"set runtimepath+=$GOROOT/misc/vim " replace $GOROOT with the output of: go env GOROOT
-filetype plugin indent on
-syntax on
-autocmd FileType go autocmd BufWritePre <buffer> Fmt
-autocmd FileType go compiler go
-" omni competion
-autocmd FileType go inoremap <C-i> <C-x><C-o>
-autocmd FileType go :map ep <Esc>:!go run %
-
-
+let g:go_version_warning = 0
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go :noremap ss :call Jump2func()<ENTER>
+autocmd FileType go nnoremap <buffer> <silent> ff :GoDef<cr>
+autocmd FileType go nnoremap <buffer> <silent> ft :<C-u>call go#def#Jump("split")<CR>
+autocmd FileType go nnoremap <buffer> <silent> fg :<C-u>call go#def#Jump("vsplit")<CR>
 " for ruby
 " {{{ vim-rubocop
 autocmd FileType ruby :nmap <Leader>r :RuboCop<CR>
-autocmd FileType ruby setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab
-autocmd FileType ruby :map ,s <Esc>:!PADRINO_FAST_LOADER=1 bundle exec parallel_rspec -n 2 %
+autocmd FileType ruby setl iskeyword+=?
+autocmd FileType ruby setl iskeyword+=!
+autocmd FileType ruby,eruby setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+autocmd FileType ruby :map ,s <Esc>:!RACK_ENV=test bundle exec rake memcached:start_for_test;PADRINO_FAST_LOADER=1 bundle exec parallel_rspec -n 2 %
+autocmd FileType ruby :map ,e <Esc>:!bundle exec rspec %:expand("line('.')")
 " open_model_rb.vim
 " vertical split and jump to app file in current window
-autocmd FileType ruby :noremap fg :call OpenAppModel('vne')<ENTER>
+autocmd FileType ruby,eruby :noremap fg :call OpenAppModel('vne')<ENTER>
 " jump to app file in current window
-autocmd FileType ruby :noremap ff :call OpenAppModel('e')<ENTER>
+autocmd FileType ruby,eruby :noremap ff :call OpenAppModel('e')<ENTER>
 " split window horizontal, and ...
-autocmd FileType ruby :noremap fd :call OpenAppModel('sp')<ENTER>
+autocmd FileType ruby,eruby :noremap fd :call OpenAppModel('sp')<ENTER>
 " open tab, and ...
-autocmd FileType ruby :noremap fd :call OpenAppModel('tabe')<ENTER>
+autocmd FileType ruby,eruby :noremap ft :call OpenAppModel('tabe')<ENTER>
 " for visual mode, use OpenAppModelV()
-autocmd FileType ruby :vnoremap fg :call OpenAppModelV('vne')<ENTER>
-
+autocmd FileType ruby,eruby :vnoremap fg :call OpenAppModelV('vne')<ENTER>
+autocmd FileType ruby autocmd BufWritePost,FileWritePost *.rb,*.rake !ruby -wc %
 " }}}
+
+" for vim-rspec
+let g:rspec_command = "!bundle exec rspec --drb {spec}"
+map <Leader>s :call RunCurrentSpecFile()<CR>
+map <Leader>n :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
 
 " for ctags
 nmap fl :vsp<CR><C-]>
@@ -719,21 +677,174 @@ map ge <Esc>:call vimproc#popen2('/usr/local/bin/ctags -R ./ ' . $HOME . '/.rben
 map <silent>sa <Plug>(operator-surround-append)
 map <silent>sd <Plug>(operator-surround-delete)
 map <silent>sr <Plug>(operator-surround-replace)
-nmap a( saiw(
-nmap a" saiw"
-nmap a' saiw'
-nmap a[ saiw[
-nmap a{ saiw{
-nmap a` saiw`
-nmap d( sda(
-nmap d" sda"
-nmap d' sda'
-nmap d[ sda[
-nmap d{ sda{
-nmap d` sda`
-nmap r( sra(
-nmap r" sra"
-nmap r' sra'
-nmap r[ sra[
-nmap r{ sra{
-nmap r` sra`
+" nmap a( saiw(
+" nmap a" saiw"
+" nmap a' saiw'
+" nmap a[ saiw[
+" nmap a{ saiw{
+" nmap a` saiw`
+" nmap d( sda(
+" nmap d" sda"
+" nmap d' sda'
+" nmap d[ sda[
+" nmap d{ sda{
+" nmap d` sda`
+" nmap r( sra(
+" nmap r" sra"
+" nmap r' sra'
+" nmap r[ sra[
+" nmap r{ sra{
+" nmap r` sra`
+
+
+" increment
+" ã˜ã“ã‚Šãã†ã«ãªã£ãŸã®ã§ã‚„ã‚ã‚‹
+" nnoremap + <C-a>
+" nnoremap - <C-x>
+
+
+" test
+inoremap <C-j> <Esc>
+nnoremap <CR> G
+
+" javascript
+autocmd FileType javascript setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+au BufNewFile,BufRead *.vue setf javascript
+
+" elixir
+autocmd BufNewFile,BufRead *.exs,*.ex set filetype=elixir
+autocmd FileType elixir imap >> \|><Space>
+autocmd FileType elixir autocmd BufWritePost *.ex !mix compile
+let g:mix_format_on_save = 0
+let g:mix_format_options = '--check-equivalent'
+autocmd FileType elixir :map ,f <Esc>:MixFormat
+" not work
+" autocmd FileType elixir setlocal formatprg=mix\ format\ -
+autocmd bufwritepost *.exs,*.ex  silent !mix format %
+set autoread
+
+" terraform
+autocmd BufNewFile,BufRead *.tf set filetype=tf
+autocmd bufwritepost *.tf  silent !terraform fmt %
+
+" for nvim
+" set nocompatible
+" map ^[OA ^[ka
+" map ^[OB ^[ja
+" map ^[OC ^[la
+" map ^[OD ^[ha
+
+" TypeScript
+autocmd BufRead,BufNewFile *.ts,*.vue set filetype=typescript
+autocmd FileType typescript setlocal ts=2 softtabstop=2 shiftwidth=2 expandtab autoindent
+
+" proto
+" autocmd BufNewFile,BufRead *.proto set filetype=proto
+" autocmd bufwritepost *.proto silent !clang-format -i -style=file %
+
+let g:go_fmt_command = "goimports"
+let g:go_def_mapping_enabled = 0
+let g:go_doc_keywordprg_enabled = 0
+" vim-lsp
+let g:lsp_diagnostics_enabled = 0
+let g:lsp_diagnostics_echo_cursor = 0
+let g:asyncomplete_auto_popup = 0
+let g:asyncomplete_auto_completeopt = 0
+" let g:asyncomplete_popup_delay = 200
+let g:lsp_text_edit_enabled = 0
+" debug
+" let g:lsp_log_verbose = 1
+" let g:lsp_log_file = expand('~/vim-lsp.log')
+" let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+if executable('gopls')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'gopls',
+        \ 'cmd': {server_info->['gopls', '-mode', 'stdio']},
+        \ 'whitelist': ['go'],
+        \ })
+endif
+" if executable('go-langserver')
+"     au User lsp_setup call lsp#register_server({
+"         \ 'name': 'go-langserver',
+"         \ 'cmd': {server_info->['go-langserver', '-gocodecompletion']},
+"         \ 'whitelist': ['go'],
+"         \ })
+"     autocmd BufWritePre *.go LspDocumentFormatSync
+" endif
+nmap <silent> <Leader>d :LspDefinition<CR>
+nmap <silent> <Leader>p :LspHover<CR>
+nmap <silent> <Leader>r :LspReferences<CR>
+nmap <silent> <Leader>i :LspImplementation<CR>
+nmap <silent> <Leader>s :split \| :LspDefinition <CR>
+nmap <silent> <Leader>v :vsplit \| :LspDefinition <CR>
+autocmd FileType go nnoremap <buffer> <silent> ff :LspDefinition<CR>
+autocmd FileType go nnoremap <buffer> <silent> ft :split \| :LspDefinition <CR>
+autocmd FileType go nnoremap <buffer> <silent> fg :vsplit \| :LspDefinition <CR>
+
+" operator-camelize
+map <leader>c <plug>(operator-camelize-toggle)
+
+
+" python
+autocmd FileType python setl autoindent
+autocmd FileType python setl smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd FileType python setl tabstop=8 expandtab shiftwidth=4 softtabstop=4
+let s:pyls_path = '/usr/local/bin/pyls'
+
+if (executable('pyls'))
+    augroup LspPython
+        autocmd!
+        autocmd User lsp_setup call lsp#register_server({
+      \ 'name': 'pyls',
+      \ 'cmd': { server_info -> [expand(s:pyls_path)] },
+      \ 'whitelist': ['python'],
+      \ 'workspace_config': {'pyls': {'plugins': {
+      \   'pycodestyle': {'enabled': v:true},
+      \   'jedi_definition': {'follow_imports': v:true, 'follow_builtin_imports': v:true},}}}
+      \ })
+    augroup END
+endif
+autocmd FileType python nnoremap <buffer> <silent> ff :LspDefinition<CR>
+autocmd FileType python nnoremap <buffer> <silent> ft :split \| :LspDefinition <CR>
+autocmd FileType python nnoremap <buffer> <silent> fg :vsplit \| :LspDefinition <CR>
+autocmd bufwritepost *.py  silent !isort % && autopep8 -i %
+set omnifunc=lsp
+
+" https://github.com/skanehira/preview-markdown.vim
+let g:preview_markdown_parser='glow -p'
+autocmd FileType markdown nnoremap <buffer> <silent> pv :PreviewMarkdown<CR>
+let g:preview_markdown_vertical=1
+
+" jq
+nnoremap <buffer> <silent> ,jp :%!jq '.'<CR>
+
+" rust
+filetype plugin indent on
+let g:rustfmt_autosave = 1
+" if executable('rust-analyzer')
+"   au User lsp_setup call lsp#register_server({
+"         \   'name': 'Rust Language Server',
+"         \   'cmd': {server_info->['rust-analyzer']},
+"         \   'whitelist': ['rust', 'rs'],
+"         \   'initialization_options': {
+"         \     'cargo': {
+"         \       'loadOutDirsFromCheck': v:true,
+"         \     },
+"         \     'procMacro': {
+"         \       'enable': v:true,
+"         \     },
+"         \   },
+"         \ })
+" endif
+" autocmd bufwritepost *.rs  silent !cargo check
+autocmd FileType rust autocmd BufWritePost *.rs !cargo check
+autocmd FileType rust nnoremap <buffer> <silent> ff :LspDefinition<CR>
+autocmd FileType rust nnoremap <buffer> <silent> ft :split \| :LspDefinition <CR>
+autocmd FileType rust nnoremap <buffer> <silent> fg :vsplit \| :LspDefinition <CR>
+" rego(opa)
+autocmd BufNewFile,BufRead *.rego set filetype=rego
+autocmd bufwritepost *.rego  silent !opa fmt -w %
+
+" cue
+" autocmd BufNewFile,BufRead *.cue set filetype=cue
+" autocmd bufwritepost *.cue  silent !cue fmt %
