@@ -53,6 +53,9 @@ eval $(dircolors -b ~/.dir_color)
 #     ssh-add ~/.ssh/id_rsa
 # fi
 
+# for github
+# ssh-add /path/to/github_key
+
 agent="$HOME/tmp/ssh-agent-$USER"
 if [ -S "$SSH_AUTH_SOCK" ]; then
     case $SSH_AUTH_SOCK in
@@ -66,6 +69,7 @@ else
 fi
 
 # User specific aliases and functions
+alias vi='vim'
 alias diff='colordiff'
 alias perldoc='env LANG=C perldoc'
 alias ll="ls -ltr"
@@ -73,6 +77,12 @@ alias la="ls -ltra"
 alias w3m='w3m -cookie'
 # for svn
 alias svn_grep_c="svn status | grep '^C' | awk '{ print $2}'"
+alias ack='ack --ignore-file=is:tags '
+alias ag='ag --ignore tags '
+alias ack_app='ack --ignore-dir coverage --ignore-dir log --ignore-dir vendor '
+alias st_server='ruby -run -e httpd . -p 9999'
+alias ipython='ipython --pylab'
+alias start_ds="gcloud beta emulators datastore start --no-store-on-disk"
 #alias svn_resol_c="svn resolved `svn status | grep '^C' | awk '{ print $2}'`" # can't escape back qupte `
 # key bind
 bindkey -e
@@ -83,44 +93,44 @@ bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line
 
 
-# 最後に打ったコマンドステータス行に
-if [ "$TERM" = "xterm-256color" ]; then
-        chpwd () { echo -n "_`dirs`^[\\" }
-        preexec() {
-                # see [zsh-workers:13180]
-                # http://www.zsh.org/mla/workers/2000/msg03993.html
-                emulate -L zsh
-                local -a cmd; cmd=(${(z)2})
-                case $cmd[1] in
-                        fg)
-                                if *1; then
-                                        cmd=(builtin jobs -l %+)
-                                else
-                                        cmd=(builtin jobs -l $cmd[2])
-                                fi
-                                ;;
-                        %*)
-                                cmd=(builtin jobs -l $cmd[1])
-                                ;;
-                        cd)
-                                if *2; then
-                                        cmd[1]=$cmd[2]
-                                fi
-                                ;&
-                        *)
-                                echo -n "k$cmd[1]:t\\"
-                                return
-                                ;;
-                esac
-
-                local -A jt; jt=(${(kv)jobtexts})
-
-                $cmd >>(read num rest
-                        cmd=(${(z)${(e):-\$jt$num}})
-                        echo -n "k$cmd[1]:t\\") 2>/dev/null
-        }
-        chpwd
-fi
+# # 最後に打ったコマンドステータス行に
+# if [ "$TERM" = "xterm-256color" ]; then
+#         chpwd () { echo -n "_`dirs`^[\\" }
+#         preexec() {
+#                 # see [zsh-workers:13180]
+#                 # http://www.zsh.org/mla/workers/2000/msg03993.html
+#                 emulate -L zsh
+#                 local -a cmd; cmd=(${(z)2})
+#                 case $cmd[1] in
+#                         fg)
+#                                 if *1; then
+#                                         cmd=(builtin jobs -l %+)
+#                                 else
+#                                         cmd=(builtin jobs -l $cmd[2])
+#                                 fi
+#                                 ;;
+#                         %*)
+#                                 cmd=(builtin jobs -l $cmd[1])
+#                                 ;;
+#                         cd)
+#                                 if *2; then
+#                                         cmd[1]=$cmd[2]
+#                                 fi
+#                                 ;&
+#                         *)
+#                                 echo -n "k$cmd[1]:t\\"
+#                                 return
+#                                 ;;
+#                 esac
+#
+#                 local -A jt; jt=(${(kv)jobtexts})
+#
+#                 $cmd >>(read num rest
+#                         cmd=(${(z)${(e):-\$jt$num}})
+#                         echo -n "k$cmd[1]:t\\") 2>/dev/null
+#         }
+#         chpwd
+# fi
 
 function chpwd() {
   ls
@@ -148,30 +158,30 @@ alias b='popd > /dev/null'
 autoload bashcompinit
 bashcompinit
 source ~/.git-completion.bash
-
+source ~/.git-prompt.sh
 # http://qiita.com/items/325cffc755fc1ff91928
-setopt prompt_subst
-autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
+# setopt prompt_subst
+# autoload -Uz VCS_INFO_get_data_git; VCS_INFO_get_data_git 2> /dev/null
 
-function rprompt-git-current-branch {
-  local name st color gitdir action
-  if [[ "$PWD" =~ '/¥.git(/.*)?$' ]]; then
-    return
-  fi
-  name=`git rev-parse --abbrev-ref=loose HEAD 2> /dev/null`
-  if [[ -z $name ]]; then
-    return
-  fi
-
-  gitdir=`git rev-parse --git-dir 2> /dev/null`
-  action=`VCS_INFO_git_getaction "$gitdir"` && action="($action)"
-
-  color=%F{green}
-  echo "$color$name$action%f%b "
-}
+# function rprompt-git-current-branch {
+#   local name st color gitdir action
+#   if [[ "$PWD" =~ '/¥.git(/.*)?$' ]]; then
+#     return
+#   fi
+#   name=`git rev-parse --abbrev-ref=loose HEAD 2> /dev/null`
+#   if [[ -z $name ]]; then
+#     return
+#   fi
+#
+#   gitdir=`git rev-parse --git-dir 2> /dev/null`
+#   action=`VCS_INFO_git_getaction "$gitdir"` && action="($action)"
+#
+#   color=%F{green}
+#   echo "$color$name$action%f%b "
+# }
 
 # -------------- how to use ---------------- #
-RPROMPT='`rprompt-git-current-branch`'
+# RPROMPT='`rprompt-git-current-branch`'
 
 if [ -f ~/.zshrc_local ]; then
     source ~/.zshrc_local
@@ -192,10 +202,164 @@ setopt hist_ignore_dups
 
 # 開始と終了を記録
 setopt EXTENDED_HISTORY
-export PATH="$HOME/.plenv/bin:$PATH"
-eval "$(plenv init -)"
+export PATH="$HOME/bin:/usr/local/bin:$HOME/.plenv/bin:/usr/local/share/dotnet:$PATH"
+
+# plenv
+#eval "$(plenv init -)"
 
 # go
-export GOROOT=$HOME/local/go
-export GOPATH=$HOME/local/gocode
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin:/usr/local/go/bin
+export GO111MODULE=on
+export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+# http://postd.cc/how-to-boost-your-vim-productivity/
+fancy-ctrl-z () {
+  if [[ $#BUFFER -eq 0 ]]; then
+    BUFFER="fg"
+    zle accept-line
+  else
+    zle push-input
+    zle clear-screen
+  fi
+}
+zle -N fancy-ctrl-z
+bindkey '^Z' fancy-ctrl-z
+
+ulimit -n 10240
+# pyenv
+PYENV_ROOT="$HOME/.pyenv"
+PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# gue-sed
+# alias sed="gsed"
+# export PS1="%F{green}[%D{%m-%d %T}](%m)[%d]%f($(__git_ps1)) %# "
+setopt PROMPT_SUBST ; PS1='%F{green}[%D{%m-%d %T}](%m)[%d]%f$(__git_ps1) {$(kube_ctx)} gcloud:$(gcloud-current)
+%'
+
+# flutter
+export PATH=~/flutter/flutter/bin:$PATH
+
+# gcloud
+#source /Users/takeshi.nakata/Downloads/google-cloud-sdk/completion.bash.inc
+#source /Users/takeshi.nakata/Downloads/google-cloud-sdk/path.bash.inc
+# なぜかpathがとおならい
+export PATH=/Users/takeshi.nakata/Downloads/google-cloud-sdk/bin:$PATH
+
+# elixir
+export PATH="$HOME/.exenv/bin:$PATH"
+export PATH=/usr/local/opt/openssl/bin:$PATH
+#export PATH="$HOME/.erlenv/bin:$PATH"
+#eval "$(erlenv init -)"
+export PATH="/usr/local/opt/erlang@20/bin:$PATH"
+export PATH="/Users/takeshi.nakata/Library/Android/sdk/platform-tools:$PATH"
+
+export PATH=$HOME/bin:$PATH
+export KUBECONFIG=~/.kube/config
+
+function kube_ctx  {
+  k=`kubectl config current-context | sed -e 's/.*\/\(.*\)/\1/'`
+    # prod
+    if [ "${k}" = "" ]; then
+      echo "\e[31m$k\e[0m"
+    else
+      echo $k
+    fi
+}
+
+function gcloud-current() {
+    g=`cat $HOME/.config/gcloud/active_config`
+    # prod
+    if [ "${g}" = "" ]; then
+      echo "\e[31m$g\e[0m"
+    else
+      echo $g
+    fi
+}
+
+function code {
+    if [[ $# = 0 ]]
+    then
+        open -a "Visual Studio Code"
+    else
+        local argPath="$1"
+        [[ $1 = /* ]] && argPath="$1" || argPath="$PWD/${1#./}"
+        open -a "Visual Studio Code" "$argPath"
+    fi
+}
+
+function kubesw {
+    selected_ctx=$(kubectl config get-contexts --no-headers | awk '{print $2}' | xargs printf "%s\n" | sort | peco --query "$1" --prompt '>' | cut -f 3)
+
+    echo ${selected_ctx}
+    if [ -n "${selected_ctx}" ]; then
+        kubectl config use-context ${selected_ctx}
+    fi
+}
+export PATH="/usr/local/opt/libxslt/bin:$PATH"
+autoload -Uz compinit && compinit
+export PATH=/Users/takeshi.nakata/.asdf/bin:/Users/takeshi.nakata/bin:/Users/takeshi.nakata/Library/Android/sdk/platform-tools:/usr/local/opt/erlang@20/bin:/usr/local/opt/openssl/bin:/Users/takeshi.nakata/.exenv/bin:/Users/takeshi.nakata/flutter/flutter/bin:/Users/takeshi.nakata/.pyenv/bin:/Users/takeshi.nakata/.rbenv/shims:/Users/takeshi.nakata/.rbenv/bin:/Users/takeshi.nakata/.rbenv/shims:/Users/takeshi.nakata/bin:/usr/local/bin:/Users/takeshi.nakata/.plenv/bin:/usr/local/share/dotnet:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/npm/bin/:/Users/takeshi.nakata/bin:/Users/takeshi.nakata/go/bin:/usr/local/go/bin:${PATH}
+source /Users/takeshi.nakata/.asdf/asdf.sh
+source /Users/takeshi.nakata/.asdf/completions/asdf.bash
+
+eval "$(direnv hook zsh)"
+
+PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+
+# gconf.zsh
+function gconf() {
+  projData=$(gcloud config configurations list | peco)
+  if echo "${projData}" | grep -E "^[a-zA-Z].*" > /dev/null ; then
+    config=$(echo ${projData} | awk '{print $1}')
+    gcloud config configurations activate ${config}
+
+    echo "=== The current account is as follows ==="
+    gcloud config configurations list | grep "${config}"
+
+    kubesw
+  fi
+}
+# alias go='/Users/takeshi.nakata/go/bin/go1.11.13'
+# alias go='/Users/takeshi.nakata/go/bin/go1.15.2'
+# alias go='/Users/takeshi.nakata/go/bin/go1.15.7'
+# alias go='/Users/takeshi.nakata/go/bin/go1.16'
+alias go='/Users/takeshi.nakata/go/bin/go1.17'
+alias f="fzf"
+alias k="kubectl"
+
+# rust
+source $HOME/.cargo/env
+
+# jenv
+eval export PATH="/Users/takeshi.nakata/.jenv/shims:${PATH}"
+export JENV_SHELL=zsh
+export JENV_LOADED=1
+unset JAVA_HOME
+source '/usr/local/Cellar/jenv/0.5.4/libexec/libexec/../completions/jenv.zsh'
+jenv rehash 2>/dev/null
+jenv refresh-plugins
+jenv() {
+  typeset command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  enable-plugin|rehash|shell|shell-options)
+    eval `jenv "sh-$command" "$@"`;;
+  *)
+    command jenv "$command" "$@";;
+  esac
+}
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/takeshi.nakata/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/takeshi.nakata/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/takeshi.nakata/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/takeshi.nakata/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+# export KUBECONFIG=/path/to/kubeconfig
