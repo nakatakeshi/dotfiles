@@ -244,10 +244,10 @@ setopt PROMPT_SUBST ; PS1='%F{green}[%D{%m-%d %T}](%m)[%d]%f$(__git_ps1) {$(kube
 export PATH=~/flutter/flutter/bin:$PATH
 
 # gcloud
-#source /Users/takeshi.nakata/Downloads/google-cloud-sdk/completion.bash.inc
-#source /Users/takeshi.nakata/Downloads/google-cloud-sdk/path.bash.inc
+#source $HOME/Downloads/google-cloud-sdk/completion.bash.inc
+#source $HOME/Downloads/google-cloud-sdk/path.bash.inc
 # なぜかpathがとおならい
-export PATH=/Users/takeshi.nakata/Downloads/google-cloud-sdk/bin:$PATH
+export PATH=$HOME/Downloads/google-cloud-sdk/bin:$PATH
 
 # elixir
 export PATH="$HOME/.exenv/bin:$PATH"
@@ -255,7 +255,7 @@ export PATH=/usr/local/opt/openssl/bin:$PATH
 #export PATH="$HOME/.erlenv/bin:$PATH"
 #eval "$(erlenv init -)"
 export PATH="/usr/local/opt/erlang@20/bin:$PATH"
-export PATH="/Users/takeshi.nakata/Library/Android/sdk/platform-tools:$PATH"
+export PATH="$HOME/Library/Android/sdk/platform-tools:$PATH"
 
 export PATH=$HOME/bin:$PATH
 export KUBECONFIG=~/.kube/config
@@ -301,9 +301,9 @@ function kubesw {
 }
 export PATH="/usr/local/opt/libxslt/bin:$PATH"
 autoload -Uz compinit && compinit
-export PATH=/Users/takeshi.nakata/.asdf/bin:/Users/takeshi.nakata/bin:/Users/takeshi.nakata/Library/Android/sdk/platform-tools:/usr/local/opt/erlang@20/bin:/usr/local/opt/openssl/bin:/Users/takeshi.nakata/.exenv/bin:/Users/takeshi.nakata/flutter/flutter/bin:/Users/takeshi.nakata/.pyenv/bin:/Users/takeshi.nakata/.rbenv/shims:/Users/takeshi.nakata/.rbenv/bin:/Users/takeshi.nakata/.rbenv/shims:/Users/takeshi.nakata/bin:/usr/local/bin:/Users/takeshi.nakata/.plenv/bin:/usr/local/share/dotnet:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/npm/bin/:/Users/takeshi.nakata/bin:/Users/takeshi.nakata/go/bin:/usr/local/go/bin:${PATH}
-source /Users/takeshi.nakata/.asdf/asdf.sh
-source /Users/takeshi.nakata/.asdf/completions/asdf.bash
+export PATH=$HOME/.asdf/bin:$HOME/bin:$HOME/Library/Android/sdk/platform-tools:/usr/local/opt/erlang@20/bin:/usr/local/opt/openssl/bin:$HOME/.exenv/bin:$HOME/flutter/flutter/bin:$HOME/.pyenv/bin:$HOME/.rbenv/shims:$HOME/.rbenv/bin:$HOME/.rbenv/shims:$HOME/bin:/usr/local/bin:$HOME/.plenv/bin:/usr/local/share/dotnet:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/npm/bin/:$HOME/bin:$HOME/go/bin:/usr/local/go/bin:${PATH}
+source $HOME/.asdf/asdf.sh
+source $HOME/.asdf/completions/asdf.bash
 
 eval "$(direnv hook zsh)"
 
@@ -330,11 +330,7 @@ function installgo() {
   go$1 version
   which go$1
 }
-# alias go='/Users/takeshi.nakata/go/bin/go1.11.13'
-# alias go='/Users/takeshi.nakata/go/bin/go1.15.2'
-# alias go='/Users/takeshi.nakata/go/bin/go1.15.7'
-# alias go='/Users/takeshi.nakata/go/bin/go1.16'
-alias go='/Users/takeshi.nakata/go/bin/go1.17'
+alias go="$HOME/go/bin/go1.17"
 alias f="fzf"
 alias k="kubectl"
 
@@ -342,7 +338,7 @@ alias k="kubectl"
 source $HOME/.cargo/env
 
 # jenv
-eval export PATH="/Users/takeshi.nakata/.jenv/shims:${PATH}"
+eval export PATH="$HOME/.jenv/shims:${PATH}"
 export JENV_SHELL=zsh
 export JENV_LOADED=1
 unset JAVA_HOME
@@ -365,9 +361,9 @@ jenv() {
 }
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/takeshi.nakata/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/takeshi.nakata/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/takeshi.nakata/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/takeshi.nakata/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]; then . "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"; fi
 
 # export KUBECONFIG=/path/to/kubeconfig
