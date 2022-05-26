@@ -322,6 +322,14 @@ function gconf() {
     kubesw
   fi
 }
+
+# install go version
+function installgo() {
+  go get golang.org/dl/go$1
+  go$1 download
+  go$1 version
+  which go$1
+}
 # alias go='/Users/takeshi.nakata/go/bin/go1.11.13'
 # alias go='/Users/takeshi.nakata/go/bin/go1.15.2'
 # alias go='/Users/takeshi.nakata/go/bin/go1.15.7'
