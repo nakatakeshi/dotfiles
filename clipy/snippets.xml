@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<folders>
+	<folder>
+		<title>cmd</title>
+		<snippets>
+			<snippet>
+				<title>git_co_from_develop</title>
+				<content>git checkout --no-track -b branch origin/develop</content>
+			</snippet>
+			<snippet>
+				<title>git_co_from_master</title>
+				<content>git checkout --no-track -b branch origin/master</content>
+			</snippet>
+			<snippet>
+				<title>git_co_from_main</title>
+				<content>git checkout --no-track -b branch origin/main</content>
+			</snippet>
+			<snippet>
+				<title>netstat</title>
+				<content>netstat -atln</content>
+			</snippet>
+			<snippet>
+				<title>mysql_uptime</title>
+				<content>mysqladmin -uroot status | cut -d &apos; &apos; -f2</content>
+			</snippet>
+			<snippet>
+				<title>core_num</title>
+				<content>getconf _NPROCESSORS_ONLN</content>
+			</snippet>
+			<snippet>
+				<title>replace</title>
+				<content>ag -l &quot;before&quot; ./dir |xargs perl -i -pe &quot;s/before/after/g&quot;</content>
+			</snippet>
+			<snippet>
+				<title>catwrite</title>
+				<content>cat &lt;&lt;EOF &gt; file
+contents
+EOF</content>
+			</snippet>
+		</snippets>
+	</folder>
+</folders>
