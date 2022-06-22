@@ -2,37 +2,10 @@
 repo = 'nakatakeshi/show_github_url.vim'
 
 [[plugins]]
-repo = 'gosukiwi/vim-atom-dark'
-
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-
-[[plugins]]
-repo = 'Shougo/neomru.vim'
-
-[[plugins]]
-repo = 'Shougo/neoyank.vim'
-
-[[plugins]]
 repo = 'tomasr/molokai'
 
 [[plugins]]
-repo = 'elixir-editors/vim-elixir'
-
-[[plugins]]
-repo = 'mhinz/vim-mix-format'
-
-[[plugins]]
 repo = 'tomtom/tcomment_vim'
-
-[[plugins]]
-repo = 'kassio/neoterm'
-
-[[plugins]]
-repo = 'slashmili/alchemist.vim'
-
-[[plugins]]
-repo = 'scrooloose/nerdtree'
 
 [[plugins]]
 repo = 'leafgarland/typescript-vim'
@@ -54,26 +27,6 @@ repo = 'prabirshrestha/asyncomplete.vim'
 
 [[plugins]]
 repo = 'prabirshrestha/asyncomplete-lsp.vim'
-
-[[plugins]]
-repo = 'junegunn/vim-easy-align'
-
-[[plugins]]
-repo = 'kana/vim-operator-user'
-
-[[plugins]]
-repo = 'tyru/operator-camelize.vim'
-
-[[plugins]]
-repo = 'ryanolsonx/vim-lsp-python'
-on_ft = ['python']
-depends = ['vim-lsp']
-
-[[plugins]]
-repo = 'ConradIrwin/vim-bracketed-paste'
-
-[[plugins]]
-repo = 'kana/vim-textobj-user'
 
 [[plugins]]
 repo = 'mattn/vim-goimports'
